@@ -32,6 +32,20 @@
                 "filter": [
                     "**/*"
                 ]
+            },
+            {
+                "from": "resources/mac",
+                "to": "Resources",
+                "filter": [
+                    "**/*"
+                ]
+            },
+            {
+                "from": "resources/win",
+                "to": "Resources",
+                "filter": [
+                    "**/*"
+                ]
             }
         ],
         "dmg": {
