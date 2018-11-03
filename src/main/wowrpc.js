@@ -4,7 +4,7 @@ const path = require('path');
 let childProcess = require('child_process');
 let textEncoding = require('text-encoding');
 let TextDecoder = textEncoding.TextDecoder;
-import { cliPath } from './binaries';
+import { platform, cliPath } from './binaries';
 
 export class WowRpc {
     // ps -ef | grep defunct | grep -v grep | cut -b8-20 | xargs kill -9
@@ -129,6 +129,8 @@ export class WowRpc {
     }
 
     _parse_stdout(data){
+        if(platform === 'win'){ data = data.replace(/\r/g, ""); }
+
         // detect incoming transaction
         let re_incoming_tx = /Height \d+, txid \<([a-zA-Z0-9]+)\>, ([0-9]+.[0-9]+), idx/g;
         if(data.match(re_incoming_tx)){
@@ -258,6 +260,7 @@ export class WowRpc {
     }
 
     _parse_stdout_create_wallet(data){
+        if(platform === 'win'){ data = data.replace(/\r/g, ""); } // lol windows
         this._buffer += data;
 
         if(data === `Logging to ${this._cli_log_path}\n`){
@@ -286,10 +289,10 @@ export class WowRpc {
                 this._create_wallet['view_key'] = re_view_key_match[1];
             }
 
-            let re_seed = /NOTE: the following 25 words can be used to recover access to your wallet. Write them down and store them somewhere safe and secure. Please do not store them in your email or on file storage services outside of your immediate control.\n\n(.*)\n(.*)\n(.*)\n\*\*\*\*/;
+            let re_seed = /\*\*\*\*\*\*SEED\n(.*)\n\*\*/
             let re_seed_match = this._buffer.match(re_seed);
             if(re_seed_match){
-                let seed = `${re_seed_match[1]} ${re_seed_match[2]} ${re_seed_match[3]}`;
+                let seed = re_seed_match[1].trim();
                 if(seed.split(' ').length !== 25){
                     this.onCreateWalletFinished("could not get seed; invalid num words");
                 }

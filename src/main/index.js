@@ -37,7 +37,7 @@ console.log(`getWalletDir(): ${wowdir}`);
 
 const Menu = electron.Menu;
 const winURL = process.env.NODE_ENV === 'development' ? `http://localhost:9080` : `file://${__dirname}/index.html`
-import { cliPath } from './binaries';
+import { platform, cliPath } from './binaries';
 
 console.log(cliPath);
 
@@ -49,7 +49,11 @@ function createWindow() {
     });
 
     mainWindow.setMenu(null);
-    mainWindow.setResizable(false);
+
+    if(platform !== 'win'){
+        mainWindow.setResizable(false);
+    }
+
     mainWindow.loadURL(winURL);
     // mainWindow.webContents.openDevTools();
     mainWindow.webContents.on("devtools-opened", () => {

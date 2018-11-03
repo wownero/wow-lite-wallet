@@ -5,6 +5,7 @@ import appRootDir from 'app-root-dir';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 console.log('Prod: ' + IS_PROD);
+
 import getPlatform from './get-platform';
 
 const execPath = IS_PROD ?
@@ -15,8 +16,9 @@ const execPath = IS_PROD ?
 const cli_binaries = {
     'linux': 'wowlight',
     'mac': 'wowlight',
-    'win32': 'wowlight.exe'
+    'win': 'wowlight.exe'
 }
 
 export const cliPath = `${joinPath(execPath, cli_binaries[getPlatform()])}`;
+export const platform = getPlatform();
 console.log('binaries.js - clipPath: ' + cliPath);
