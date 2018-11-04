@@ -123,7 +123,17 @@
                     'Stealing WFS funds.',
                     'Trolling Perl community.',
                     'Don\'t you dare spending any WOW today.',
-                    'No Doubt - Don\'t Speak'
+                    'No Doubt - Don\'t Speak',
+                    'Adding N to (X)',
+                    'Running garytheasshole\'s oneliners...',
+                    '.seen mattcode',
+                    'Checking gap in pond',
+                    'Check can withdraw new purse',
+                    'Sun is not doing, Allah is doing',
+                    'When block?',
+                    'When payout?',
+                    'When fork?',
+                    'ö-pöpoo!'
                 ]
             }
         },
