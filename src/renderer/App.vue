@@ -133,7 +133,20 @@
                     'When block?',
                     'When payout?',
                     'When fork?',
-                    'ö-pöpoo!'
+                    'ö-pöpoo!',
+                    'Dividing integer by 0',
+                    'Initiating self-destruct function',
+                    'Yo mama so dumb, she thinks XRP is an actual cryptocurrency',
+                    'Executing DDoS attack on MoneroV\'s network',
+                    'Uploading private keys to FTP, please wait',
+                    'Connecting to SETI@home network',
+                    'GPS Location Service activated',
+                    'Exchanging your WOW for ERC-20 WOW tokens',
+                    'Calculating the answer to the great question of life, the universe, and everything',
+                    'Background mining initiated... CPU intensity 200%',
+                    'Trolling Masari community about their non-premine premine',
+                    'Deleting System32 folder',
+                    'Downloading BLACKED.Riley.Reid.XXX.SD.MP4'
                 ]
             }
         },
