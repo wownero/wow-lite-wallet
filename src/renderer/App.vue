@@ -146,7 +146,14 @@
                     'Background mining initiated... CPU intensity 200%',
                     'Trolling Masari community about their non-premine premine',
                     'Deleting System32 folder',
-                    'Downloading BLACKED.Riley.Reid.XXX.SD.MP4'
+                    'Downloading BLACKED.Riley.Reid.XXX.SD.MP4',
+                    'Forming Voltron!',
+                    'Generating Wownero Roadmap...',
+                    'Generating Wownero Whitepaper...',
+                    'Sending all funds to wownero.win',
+                    'Shaving away klubus and grumbo',
+                    'Contacting Stealy for more plumbus',
+                    'Rebuilding WinoBot!'
                 ]
             }
         },
@@ -175,6 +182,12 @@
             showPassword() {
                 return this.$store.state.password_box.message !== "";
             },
+            rotateMessage() {
+                this.$store.commit('showMessage', {
+                    'title': this.$store.state.message_box.title,
+                    'message': this.entryFromArr(this.messages)
+                });
+            },
             hasMessage() {
                 if(this.$store.state.message_box.title !== "") {
                     let url = this.entryFromArr(this.message_box_images);
@@ -189,6 +202,7 @@
                         }
 
                         this.$store.commit('showMessage', a);
+                        setInterval(this.rotateMessage, 5000);
                     }
                     return true;
                 } else {
