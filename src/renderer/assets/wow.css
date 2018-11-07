@@ -733,6 +733,10 @@ main.dashboard div[data-collapsed=false] .card-body {
     margin-left: 20px;
 }
 
+.loading {
+    width: 500px;
+}
+
 .loading, .password {
     width: 100%;
     height: 100%;
