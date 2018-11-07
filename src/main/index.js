@@ -1,4 +1,4 @@
-import {app, BrowserWindow} from 'electron'
+import {app, BrowserWindow, Menu} from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -21,7 +21,6 @@ const store = new Store();
 const fs = require('fs');
 
 const utils = require('electron-util');
-utils.enforceMacOSAppLocation();
 
 let homedir = (process.platform === 'win32') ? process.env.HOMEPATH : process.env.HOME;
 let wowdir = `${homedir}/Wownero`;
@@ -35,13 +34,14 @@ let wallet = new wowrpc.WowRpc(wowdir);
 
 console.log(`getWalletDir(): ${wowdir}`);
 
-const Menu = electron.Menu;
 const winURL = process.env.NODE_ENV === 'development' ? `http://localhost:9080` : `file://${__dirname}/index.html`
 import { platform, cliPath } from './binaries';
 
 console.log(cliPath);
 
 function createWindow() {
+    utils.enforceMacOSAppLocation();
+
     mainWindow = new BrowserWindow({
         height: 550,
         useContentSize: true,
@@ -64,6 +64,25 @@ function createWindow() {
         mainWindow = null;
         console.log('lat0rz');
     });
+
+    const template = [
+        {
+            label: 'Edit',
+            submenu: [
+                { role: 'undo' },
+                { role: 'redo' },
+                { type: 'separator' },
+                { role: 'cut' },
+                { role: 'copy' },
+                { role: 'paste' },
+                { role: 'pasteandmatchstyle' },
+                { role: 'delete' },
+                { role: 'selectall' }
+            ]
+        }
+    ];
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
 }
 
 app.on('ready', createWindow)
