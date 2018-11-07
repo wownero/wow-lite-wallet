@@ -146,7 +146,14 @@
                     'Background mining initiated... CPU intensity 200%',
                     'Trolling Masari community about their non-premine premine',
                     'Deleting System32 folder',
-                    'Downloading BLACKED.Riley.Reid.XXX.SD.MP4'
+                    'Downloading BLACKED.Riley.Reid.XXX.SD.MP4',
+                    'Forming Voltron!',
+                    'Generating Wownero Roadmap...',
+                    'Generating Wownero Whitepaper...',
+                    'Sending all funds to wownero.win',
+                    'Shaving away klubus and grumbo',
+                    'Contacting Stealy for more plumbus',
+                    'Rebuilding WinoBot!'
                 ]
             }
         },
