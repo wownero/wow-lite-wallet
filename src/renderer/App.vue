@@ -69,6 +69,7 @@
             return {
                 'background_pos': -200,
                 'loading_img': '',
+                'rotateInterval': false,
                 'message_box_images': [],
                 'messages': [
                     "This could take a while. Or not. Who knows? It might even give you an error!",
@@ -202,7 +203,9 @@
                         }
 
                         this.$store.commit('showMessage', a);
-                        setInterval(this.rotateMessage, 5000);
+                        if (!this.rotateInterval) {
+                          this.rotateInterval = setInterval(this.rotateMessage, 5000);
+                        }
                     }
                     return true;
                 } else {
