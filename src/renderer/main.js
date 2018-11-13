@@ -36,6 +36,12 @@ let app = new Vue({
             this.$store.commit('addWalletDir', data);
         });
 
+        this.$electron.ipcRenderer.on('rpc_get_cfg', (event, data) => {
+            console.log('renderer get_cfg');
+            console.log(data);
+            this.$store.commit('addCfg', data);
+        });
+
         this.$electron.ipcRenderer.on('rpc_wallet_created', (event, data) => {
             self.$store.commit('appState', null);
 

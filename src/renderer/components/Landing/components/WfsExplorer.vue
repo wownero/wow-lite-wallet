@@ -9,7 +9,7 @@
                         </span>
 
                         <span class="amount">
-                            {{Number((proposal.funds_target/100)*proposal.funded_pct).toFixed(2)}} WOW remaining
+                            {{Number((proposal.funds_target - (proposal.funds_target/100)*proposal.funded_pct)).toFixed(2)}} WOW remaining
                         </span> <small>({{Number(proposal.funded_pct).toFixed(1)}}% funded)</small>
                     </a>
                 </td>

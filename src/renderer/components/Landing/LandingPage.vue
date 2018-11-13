@@ -7,18 +7,29 @@
                 <p>Welcome to wownero light!</p>
                 <ul style="margin-bottom: 22px">
                     <li>Electron/Vue.js <small>(OSX/Windows/Linux)</small></li>
-                    <li>Remote node only</li>
+                    <li>Works most of the time</li>
                 </ul>
 
-                <button id="create_wallet_btn" v-on:click="createWallet" type="button" class="btn btn-success">
+                <button id="create_wallet_btn" v-on:click="createWallet" type="button" class="btn btn-success btn-sm">
                     <i class="fa fa-plus" id="create_wallet_icon" aria-hidden="true"></i>
-                    Create a new wallet
+                    Create wallet
                 </button>
 
-                <button id="x_btn" v-on:click="openWallet" type="button" class="btn btn-success">
+                <div class="dropdown" style="display: inline-block;">
+                    <button class="btn btn-success btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-folder-open" aria-hidden="true"></i>
+                        Open wallet
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a v-on:click="openWallet" class="dropdown-item" href="#">Browse</a>
+                        <a v-on:click="openLastWallet" v-if="cfg_wallet_path !== ''" class="dropdown-item" href="#">{{cfg_wallet_path_name}}</a>
+                    </div>
+                </div>
+
+                <button id="" v-on:click="settings" type="button" class="btn btn-success btn-sm">
                     <!-- fa fa-refresh fa-spin -->
-                    <i class="fa fa-folder-open" aria-hidden="true"></i>
-                    Open wallet
+                    <i class="fa fa-cog" aria-hidden="true"></i>
+                    Settings
                 </button>
             </div>
 
@@ -26,10 +37,13 @@
                 <div class="card my-4" style="margin-top: 0 !important;">
                     <h5 class="card-header">Node</h5>
                     <div class="card-body node">
-                        <div class="form-group">
-                            <select class="form-control">
-                                <option>node.wowne.ro:34568</option>
+                        <div class="form-group node_select">
+                            <select id="selectnode" class="form-control">
+                                <option :selected="selected_node === node.address" v-bind:value="node.address" v-for="node in nodes">{{node.region}} - {{node.address}}</option>
                             </select>
+                            <div class="node_status">
+                                <small class="location"></small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -71,6 +85,9 @@
             open(link) {
                 this.$electron.shell.openExternal(link)
             },
+            settings(){
+                this.$router.push({name: 'settings'});
+            },
             createWallet(){
                 // make sure any stale process is killed anyway ;/
                 ipcRenderer.send('rpc_kill_wallet');
@@ -100,9 +117,21 @@
                         }, 50);
                     }
                 });
+            },
+            openLastWallet(){
+                if(!this.cfg_wallet_path || this.cfg_wallet_path === ''){
+                    alert('Invalid wallet path?!');
+                    return;
+                }
+
+                this.$store.commit('addWalletPath', this.cfg_wallet_path);
+                this.$store.commit('showPassword', {
+                    'message': 'Enter wallet password'
+                });
             }
         },
         mounted() {
+            let select_node = jQuery('#selectnode');
             const axios = require('axios');
             axios.get('https://funding.wownero.com/api/1/convert/wow-usd?amount=1000').then(response => {
                 this.$store.commit('addRate', response.data.usd);
@@ -118,12 +147,9 @@
                         buttons: ['OK'],
                         message: `You are running an old instance of wowlight and need to upgrade!\n\nVisit https://light.wownero.com for a shiny new version.`
                     }
-                    dialog.showMessageBox(dialogOptions, i => {
-                    });
+                    dialog.showMessageBox(dialogOptions, i => {});
                 }
             });
-
-            ipcRenderer.send('rpc_get_wowdir');
 
             this.$electron.ipcRenderer.on('rpc_wallet_opening', (event) => {
                 console.log('opening');
@@ -133,7 +159,15 @@
                 });
             });
 
-            //this.$router.push({name: 'dashboard'});
+            select_node.on('change', (fuckme) => {
+                let address = fuckme.currentTarget.value;
+                let nodes = this.$store.getters.cfg.nodes;
+                let node = nodes.find(_node => _node.address === address)
+
+                ipcRenderer.send('rpc_cfg_set_node', node.address);
+
+                jQuery('.node_status .location').html(`Location: ${node.location}`);
+            });
         },
         computed: {
             walletDir(){
@@ -147,6 +181,19 @@
             },
             wallet(){
                 return this.$store.state.wallet;
+            },
+            nodes(){
+                return this.$store.getters.cfg.nodes;
+            },
+            selected_node(){
+                return this.$store.getters.cfg.node;
+            },
+            cfg_wallet_path(){
+                return this.$store.getters.cfg.wallet_path;
+            },
+            cfg_wallet_path_name(){
+                let path = require("path");
+                return path.basename(this.cfg_wallet_path);
             }
         }
     }

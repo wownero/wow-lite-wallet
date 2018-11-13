@@ -81,7 +81,6 @@
                 _txs_pooled.map((tx, i) => {
                     _txs.insert(0, tx);
                 });
-                // let _txs = [];
                 return _txs;
             }
         },

@@ -10,7 +10,7 @@
                     </div>
                     <div class="form-group">
                         <label for="password" class="control-label">Wallet password</label>
-                        <input id="password" name="password" type="text" class="form-control" aria-describedby="passwordHelpBlock">
+                        <input id="password" name="password" type="password" class="form-control" aria-describedby="passwordHelpBlock">
                         <span id="passwordHelpBlock" class="help-block">A wallet password is recommended but not required.</span>
                     </div>
                     <div class="form-group">

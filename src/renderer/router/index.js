@@ -39,9 +39,14 @@ export default new Router({
             path: '/enter-password',
             name: 'enter-password',
             component: require('@/components/Landing/EnterPassword').default
+        },
+        {
+            path: '/settings',
+            name: 'settings',
+            component: require('@/components/Landing/Settings').default
         }
     ],
     beforeEach: () => {
         console.log("changed");
     }
-})
+});
