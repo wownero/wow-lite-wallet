@@ -14,7 +14,7 @@
                             <li>thrmo <small>(Lead shill)</small></li>
                             <li>bomb-on <small>(Lead Pool)</small></li>
                             <li><a href="#" v-on:click="jw">jwintern</a> <small>(CEO™)</small></li>
-                            <li>Justin Bieber</li>
+                            <li>Monero community</li>
                             <li>rbrunner <small>(MMS)</small></li>
                             <li>Febo</li>
                             <li>Highdude</li>
@@ -40,7 +40,7 @@
                     </div>
                     <div class="col-sm-3">
                         <ul>
-                            <li>vicer0y</li>
+                            <li>vicer0y <small>(wownero.info)</small></li>
                             <li>@bl4sty</li>
                             <li>kico <small>(TooL)</small></li>
                             <li>notmike <small>(popping off)</small></li>
@@ -64,8 +64,7 @@
                             <li>scoobybejesus</li>
                             <li>kloinka</li>
                             <li>ilovetron</li>
-                            <li>OhGodAGirl</li>
-                            <li>Gwen Stefani</li>
+                            <li>\x</li>
                         </ul>
                     </div>
                 </div>

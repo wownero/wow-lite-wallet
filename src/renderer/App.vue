@@ -31,7 +31,7 @@
                                 <input type="password" id="password" class="form-control" placeholder="..." required="" autofocus autocomplete="off" style="z-index:666;">
                             </div>
                             <div class="col-sm-3">
-                                <button id="x_btn" v-on:click="submitPassword" type="button" class="btn btn-success">
+                                <button id="x_btn2" v-on:click="submitPassword" type="button" class="btn btn-success">
                                     <!-- fa fa-refresh fa-spin -->
                                     <i class="fa fa-folder-open" aria-hidden="true"></i>
                                     Open
@@ -71,91 +71,7 @@
                 'loading_img': '',
                 'rotateInterval': false,
                 'message_box_images': [],
-                'messages': [
-                    "This could take a while. Or not. Who knows? It might even give you an error!",
-                    "Two days from now, tomorrow will be yesterday.",
-                    "You will soon have an out of money experience.",
-                    "Two can live as cheaply as one, for half as long.",
-                    "Hard work pay off in future. Laziness pay off now.",
-                    "The crypto apocalypse is near, might as well have dessert.",
-                    "This coin is no good. Try another.",
-                    "Of all the shitcoins, you picked WOW. Congratulations!",
-                    "WOW is going nowhere, but at least the path is interesting.",
-                    "Indecision is key to flexibility.",
-                    "A day without sunshine is like night.",
-                    "The fortune you seek is in another wallet.",
-                    "You have kleptomania. Take some WOW for it.",
-                    "perl5 is just syntax; CPAN is the language",
-                    "This software sucks. Why are you executing random crap from the internet?",
-                    "Linux sucks.",
-                    "Windows sucks.",
-                    "OSX sucks.",
-                    "TempleOS ftw.",
-                    "Perl sucks.",
-                    "garyzeasshole sucks.",
-                    'My hobby is \'collecting magic internet money\'.',
-                    'Hacking Roger Ver.',
-                    'Hacking Statue of liberty.',
-                    'Monero is better. You should use it.',
-                    'Hacking Area 51.',
-                    'Hacking the Illuminati.',
-                    'Hacking everyone.',
-                    'PRIVMSG garyzeasshole A/S/L?\\r\\n',
-                    'Hacking all banks.',
-                    'Be your own bank. lol.',
-                    'Hacking fluffypony.',
-                    'Making WOW great again.',
-                    'Ordering Kebab.',
-                    'Ordering Pizza.',
-                    'SELECT * INTO OUTFILE \'/tmp/kek.dump\' FROM users; DROP TABLE clients; #cunts',
-                    'SELECT * FROM Users WHERE UserId = 105 OR 1=1; ',
-                    '¯\\_(ツ)_/¯',
-                    'Shorting MoneroV.',
-                    'Losing private keys.',
-                    'Shorting Verge.',
-                    'Boating accidents.',
-                    'Forking Wownero.',
-                    'Stealing wowbux funds.',
-                    'Spamming bitcointalk.org.',
-                    'Shilling wownero on reddit.',
-                    'Spambot attacking freenode.',
-                    'Hacking jwintern.',
-                    'Hacking dsc.',
-                    'Stealing WFS funds.',
-                    'Trolling Perl community.',
-                    'Don\'t you dare spending any WOW today.',
-                    'No Doubt - Don\'t Speak',
-                    'Adding N to (X)',
-                    'Running garytheasshole\'s oneliners...',
-                    '.seen mattcode',
-                    'Checking gap in pond',
-                    'Check can withdraw new purse',
-                    'Sun is not doing, Allah is doing',
-                    'When block?',
-                    'When payout?',
-                    'When fork?',
-                    'ö-pöpoo!',
-                    'Dividing integer by 0',
-                    'Initiating self-destruct function',
-                    'Yo mama so dumb, she thinks XRP is an actual cryptocurrency',
-                    'Executing DDoS attack on MoneroV\'s network',
-                    'Uploading private keys to FTP, please wait',
-                    'Connecting to SETI@home network',
-                    'GPS Location Service activated',
-                    'Exchanging your WOW for ERC-20 WOW tokens',
-                    'Calculating the answer to the great question of life, the universe, and everything',
-                    'Background mining initiated... CPU intensity 200%',
-                    'Trolling Masari community about their non-premine premine',
-                    'Deleting System32 folder',
-                    'Downloading BLACKED.Riley.Reid.XXX.SD.MP4',
-                    'Forming Voltron!',
-                    'Generating Wownero Roadmap...',
-                    'Generating Wownero Whitepaper...',
-                    'Sending all funds to wownero.win',
-                    'Shaving away klubus and grumbo',
-                    'Contacting Stealy for more plumbus',
-                    'Rebuilding WinoBot!'
-                ]
+                'messages': []
             }
         },
         methods: {
@@ -218,6 +134,9 @@
             }
         },
         mounted () {
+            ipcRenderer.send('rpc_get_wowdir');
+            ipcRenderer.send('rpc_get_cfg');
+
             Array.prototype.insert = function ( index, item ) {
                 this.splice( index, 0, item );
             };
@@ -228,6 +147,13 @@
                 }, 1000);
             });
 
+            ipcRenderer.send('rpc_get_embedded_version');
+
+            // bootstrap edgy messages.js
+            let {messages} = require('./assets/messages.js');
+            this.messages = messages;
+
+            // bootstrap edgy images
             for (let i = 0; i < 32; i++) {
                 this.message_box_images.push('l' + i + '.gif');
             }
@@ -236,12 +162,19 @@
             let window_width = jQuery(window).width();
             let window_height = jQuery(window).height();
 
+            // background mouse animations
             jQuery(document).mousemove((event) => {
                 let offset_x = 100 - (event.pageX / window_width) * 100;
                 let offset_y = -40 - (event.pageY / window_height) * 100;
 
                 html.css('background-position-x', '' + (offset_x / 5) + 'px');
                 html.css('background-position-y', '' + (offset_y / 5) + 'px');
+            });
+
+            this.$electron.ipcRenderer.on('embedded_version', (event, version) => {
+                this.$store.commit('addEmbeddedVersion', {
+                    'version': version
+                });
             });
 
             this.$electron.ipcRenderer.on('rpc_wallet_opened', (event) => {
@@ -277,6 +210,6 @@
 
 <style>
     @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
-    @import url('~@/assets/bootstrap.min.css');
     @import url('~@/assets/wow.css');
 </style>
+

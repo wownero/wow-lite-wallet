@@ -19,12 +19,6 @@
                 <span class="version">
                     {{version}} - <span style="font-size:12px;">{{version_embedded}}</span>
                 </span>
-                <a class="credits" href="#"  v-on:click="openCredits">
-                    Credits
-                </a>
-                <span class="author">
-                    dsc
-                </span>
             </div>
         </div>
 
@@ -33,31 +27,21 @@
 
 <script>
     export default {
-        name: "WarioLanding",
+        name: "WarioSettings",
         data(){
             return {
                 'electron_version': null
             }
         },
         mounted() {
-            let wario = jQuery('.wario_walking_animated');
-            let window_width = jQuery(window).width();
-
-            function wario_animate(){
-                wario.animate({
-                    left: `${window_width}px`
-                }, 8000, 'linear', () => {
-                    wario.css('left', '-400px');
-                    wario_animate();
-                });
-            }
-
-            wario_animate();
+            jQuery('main.credits .perlsux').click((event) => {
+                this.back();
+            });
         },
         methods: {
-            openCredits(){
-                this.$router.push({name: 'credits'});
-            }
+            back(){
+                this.$router.push({name: 'landing-page'});
+            },
         },
         computed: {
             version_embedded(){

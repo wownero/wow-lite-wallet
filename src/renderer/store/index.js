@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
 Vue.use(Vuex)
 
 
@@ -9,6 +8,11 @@ export default new Vuex.Store({
         height_from: 0,  // height refreshes
         height_to: 0,
         wallet_dir: "",
+        cfg: {
+            "node": "",
+            "nodes": [],
+            "wallet_path": ""
+        },
         created_wallet: {},  // only used when creating wallets
         appState: "",  // not really used
         error: "",
@@ -30,9 +34,14 @@ export default new Vuex.Store({
             'state': -1
         }, // wallet opened
         wallet_path: '',
-        wallet_password: ''
+        wallet_password: '',
+        version_embedded: '',
+        version: require('electron').remote.app.getVersion()
     },
     mutations: {
+        addEmbeddedVersion(state, data){
+            state.version_embedded = data.version;
+        },
         addCreatedWallet({ created_wallet }, data) {
             created_wallet.seed = data.seed;
             created_wallet.address = data.address;
@@ -42,6 +51,24 @@ export default new Vuex.Store({
         },
         addWalletDir(state, data){
             state.wallet_dir = data;
+        },
+        addCfg({cfg}, data){
+            console.log('store addCfg');
+            if (typeof data === 'string' || data instanceof String){ // fucku javascript
+                data = JSON.parse(data);
+            }
+
+            if(data.hasOwnProperty('node')){
+                cfg.node = data.node;
+            }
+
+            if(data.hasOwnProperty('nodes')){
+                cfg.nodes = data.nodes;
+            }
+
+            if(data.hasOwnProperty('wallet_path')){
+                cfg.wallet_path = data.wallet_path;
+            }
         },
         appState(state, data){
             state.appState = data;
@@ -109,6 +136,8 @@ export default new Vuex.Store({
         message_box: state => state.message_box,
         password_box: state => state.password_box,
         height_from: state => state.height_from,
-        height_to: state => state.height_to
+        height_to: state => state.height_to,
+        version_embedded: state => state.version_embedded,
+        cfg: state => state.cfg
     }
 });

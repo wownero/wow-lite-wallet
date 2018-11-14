@@ -12,27 +12,27 @@ let mainWindow
 
 const electron = require('electron');
 const {ipcMain} = require('electron');
-// import jQuery from 'jquery';
+const path = require('path');
 const wowrpc = require('./wowrpc');
-
+const config = require('./config');
 const Store = require('electron-store');
 const store = new Store();
 
 const fs = require('fs');
-
 const utils = require('electron-util');
 
 let homedir = (process.platform === 'win32') ? process.env.HOMEPATH : process.env.HOME;
-let wowdir = `${homedir}/Wownero`;
+let wowdir = path.join(homedir, 'Wownero');
 
 if (!fs.existsSync(wowdir)){
     console.log(`${wowdir} created`);
     fs.mkdirSync(wowdir);
 }
 
+// WowRPC & cfg bootstrap
 let wallet = new wowrpc.WowRpc(wowdir);
-
-console.log(`getWalletDir(): ${wowdir}`);
+let cfg = new config.Config(wowdir);
+wallet._cli_daemon_address = cfg.data.node;
 
 const winURL = process.env.NODE_ENV === 'development' ? `http://localhost:9080` : `file://${__dirname}/index.html`
 import { platform, cliPath } from './binaries';
@@ -55,10 +55,14 @@ function createWindow() {
     }
 
     mainWindow.loadURL(winURL);
-    // mainWindow.webContents.openDevTools();
-    mainWindow.webContents.on("devtools-opened", () => {
-        mainWindow.webContents.closeDevTools();
-    });
+
+    if(process.env.NODE_ENV === 'development'){
+        mainWindow.webContents.openDevTools();
+    } else {
+        mainWindow.webContents.on("devtools-opened", () => {
+            mainWindow.webContents.closeDevTools();
+        });
+    }
 
     mainWindow.on('closed', () => {
         mainWindow = null;
@@ -99,6 +103,8 @@ function createWindow() {
         const menu = Menu.buildFromTemplate(template);
         Menu.setApplicationMenu(menu);
     }
+
+    wallet.getEmbeddedVersion();
 }
 
 app.on('ready', createWindow)
@@ -125,14 +131,26 @@ app.on('activate', () => {
     }
 });
 
-ipcMain.on('ping', (event, data) => {
-    console.log("received ping!");
-    event.sender.send('pong', Math.random());
+ipcMain.on('rpc_get_embedded_version', (event) => {
+    wallet.onEmbeddedVersion = (version) => {
+        event.sender.send( 'embedded_version', version);
+    };
+    wallet.getEmbeddedVersion();
+
 });
 
 ipcMain.on('rpc_get_wowdir', (event, data) => {
-    console.log('RPC_GET_WOWDIR');
     event.sender.send('rpc_get_wowdir', wowdir);
+});
+
+ipcMain.on('rpc_cfg_set_node', (event, node) => {
+    if(cfg.selectNode(node)){
+        wallet._cli_daemon_address = node;
+    }
+});
+
+ipcMain.on('rpc_get_cfg', (event) => {
+    event.sender.send('rpc_get_cfg', cfg.data);
 });
 
 ipcMain.on('rpc_create_wallet', (event, data) => {
@@ -178,6 +196,7 @@ function resetWallet(){
     }
 
     wallet = new wowrpc.WowRpc(wowdir);
+    wallet._cli_daemon_address = cfg.data.node;
 }
 
 ipcMain.on('rpc_close_wallet', (event) => {
@@ -192,6 +211,7 @@ ipcMain.on('rpc_kill_wallet', (event) => {
 
 ipcMain.on('rpc_open_wallet', (event, data) => {
     wallet.onWalletOpened = function(data){
+        cfg.saveLastWalletPath(data.wallet_path);
         event.sender.send('rpc_wallet_opened', data);
     }
 

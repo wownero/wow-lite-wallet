@@ -89,7 +89,8 @@
                     let path_wallet = path.join(this.walletDir, this.wallet.name);
 
                     ipcRenderer.send('rpc_open_wallet', {
-                        path: path_wallet, password: this.wallet.password
+                        path: path_wallet,
+                        password: this.wallet.password
                     });
 
                     this.$router.push({name: 'landing-page'});

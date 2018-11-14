@@ -23,10 +23,12 @@ export class WowRpc {
         this._wallet_path = '';
         this._cli_wallet_password = '';
         this._cli_wallet_address = null;
+        this._cli_daemon_address = '';
         this._cli_wallet_selected_account = null;
         this._cli_balance_unlocked = null;
         this._cli_balance = null;
         this._cli_txs = [];
+        this._version = "";
         this._buffer = "";
         this._sending = false;
 
@@ -43,10 +45,6 @@ export class WowRpc {
             '--generate-new-wallet',
             this._create_wallet_tmp_path
         ]
-        this._cli_args_connect = [
-            '--daemon-address',
-            'node.wowne.ro:34568'
-        ];
         // '--restore-deterministic-wallet' recover from seed
 
         // lil' state machine
@@ -364,8 +362,7 @@ export class WowRpc {
         this._wallet_path = wallet_path;
         this._cli_wallet_password = wallet_password;
 
-        let cli_args = [];
-        cli_args = cli_args.concat(this._cli_args_connect);
+        let cli_args = ['--daemon-address', this._cli_daemon_address];
         cli_args = cli_args.concat(this._cli_args_default);
         cli_args.push('--wallet-file');
         cli_args.push(wallet_path);
@@ -468,6 +465,24 @@ export class WowRpc {
         if(fn != null){
             fn(data);
         }
+    }
+
+    getEmbeddedVersion(){
+        console.log('Retrieving embedded version.');
+        let args = ['--version'];
+        this._cli_process = childProcess.spawn(this._cli_path, args);
+        this._cli_process.stdout.on('data', (data) => {
+            data = new TextDecoder("utf-8").decode(data);
+            console.log("[cli] " + data);
+            let version = data.trim().split(" ").slice(1).join(" ").trim();
+            this._cli_process.kill();
+
+            this.onEmbeddedVersion(version);
+        });
+    }
+
+    onEmbeddedVersion(version){
+        // overloaded
     }
 
     onWalletOpened(data){

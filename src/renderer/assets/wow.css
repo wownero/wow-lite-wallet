@@ -1172,3 +1172,32 @@ main.enterpassword .password_seq .heli {
     left: 420px;
     bottom: 4px;
 }
+
+main.landing div.node_select{
+    margin-bottom:0;
+}
+
+main.landing div.node_status {
+    margin-top:8px;
+}
+
+main.landing div.node_status small {
+    display: block;
+}
+
+main.landing .card-body {
+    padding-bottom: 0.5rem;
+}
+
+main.landing .card-body .table {
+    margin-bottom: 0;
+}
+
+main.landing .card-body .table tbody td {
+    padding-bottom: 0;
+}
+
+.dropdown-item {
+    padding: .1rem .75rem;
+    font-size: 14px;
+}
