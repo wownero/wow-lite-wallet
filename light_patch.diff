@@ -1,38 +1,46 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index c3dc88b0..e04892f8 100644
+index c3dc88b..2ed8ddf 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -466,15 +466,18 @@ endif()
+@@ -103,6 +103,8 @@ if(NOT CMAKE_BUILD_TYPE)
+ endif()
+ string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_LOWER)
+ 
++add_definitions(-DUSE_DEVICE_LEDGER=0)
++
+ # ARCH defines the target architecture, either by an explicit identifier or
+ # one of the following two keywords. By default, ARCH a value of 'native':
+ # target arch = host arch, binary is not portable. When ARCH is set to the
+@@ -425,8 +427,6 @@ if(STATIC AND NOT IOS)
+   endif()
+ endif()
+ 
+-find_package(PCSC)
+-
+ add_definition_if_library_exists(c memset_s "string.h" HAVE_MEMSET_S)
+ add_definition_if_library_exists(c explicit_bzero "strings.h" HAVE_EXPLICIT_BZERO)
+ add_definition_if_function_found(strptime HAVE_STRPTIME)
+@@ -466,14 +466,8 @@ endif()
  include_directories(${LIBUNWIND_INCLUDE})
  link_directories(${LIBUNWIND_LIBRARY_DIRS})
-
-+if(USE_DEVICE_LEDGER)
-+  set(USE_DEVICE_LEDGER 0)
-+
- # Final setup for libpcsc
--if (PCSC_FOUND)
+ 
+-# Final setup for libpcsc
+-if (PCSC_FOUND) 
 -  message(STATUS "Using PCSC include dir at ${PCSC_INCLUDE_DIR}")
 -  add_definitions(-DHAVE_PCSC)
 -  include_directories(${PCSC_INCLUDE_DIR})
 -  link_directories(${LIBPCSC_LIBRARY_DIRS})
 -else (PCSC_FOUND)
 -  message(STATUS "Could not find PCSC")
--endif()
-+#if (PCSC_FOUND)
-+#  message(STATUS "Using PCSC include dir at ${PCSC_INCLUDE_DIR}")
-+#  add_definitions(-DHAVE_PCSC)
-+#  include_directories(${PCSC_INCLUDE_DIR})
-+#  link_directories(${LIBPCSC_LIBRARY_DIRS})
-+#else (PCSC_FOUND)
-+#  message(STATUS "Could not find PCSC")
-+#endif()
-
++if(USE_DEVICE_LEDGER)
++  set(USE_DEVICE_LEDGER 0)
+ endif()
+ 
  if(MSVC)
-   add_definitions("/bigobj /MP /W3 /GS- /D_CRT_SECURE_NO_WARNINGS /wd4996 /wd4345 /D_WIN32_WINNT=0x0600 /DWIN32_LEAN_AND_MEAN /DGTEST_HAS_TR1_TUPLE=0 /FIinline_c.h /D__SSE4_1__")
-@@ -904,31 +907,31 @@ endif()
+@@ -904,32 +898,6 @@ endif()
  add_subdirectory(contrib)
  add_subdirectory(src)
-
+ 
 -if(BUILD_TESTS)
 -  add_subdirectory(tests)
 -endif()
@@ -47,10 +55,7 @@ index c3dc88b0..e04892f8 100644
 -    message("Doxygen: graphviz not found - graphs disabled")
 -    set(DOC_GRAPHS "NO")
 -  endif()
-+#if(BUILD_TESTS)
-+#  add_subdirectory(tests)
-+#endif()
-
+-
 -  find_package(Doxygen)
 -  if(DOXYGEN_FOUND)
 -    configure_file("cmake/Doxyfile.in" "Doxyfile" @ONLY)
@@ -61,44 +66,25 @@ index c3dc88b0..e04892f8 100644
 -      COMMENT "Generating API documentation with Doxygen.." VERBATIM)
 -  endif()
 -endif()
-+#if(BUILD_DOCUMENTATION)
-+#  set(DOC_GRAPHS "YES" CACHE STRING "Create dependency graphs (needs graphviz)")
-+#  set(DOC_FULLGRAPHS "NO" CACHE STRING "Create call/callee graphs (large)")
-+#
-+#  find_program(DOT_PATH dot)
-+#
-+#  if (DOT_PATH STREQUAL "DOT_PATH-NOTFOUND")
-+#    message("Doxygen: graphviz not found - graphs disabled")
-+#    set(DOC_GRAPHS "NO")
-+#  endif()
-+#
-+#  find_package(Doxygen)
-+#  if(DOXYGEN_FOUND)
-+#    configure_file("cmake/Doxyfile.in" "Doxyfile" @ONLY)
-+#    configure_file("cmake/Doxygen.extra.css.in" "Doxygen.extra.css" @ONLY)
-+#    add_custom_target(doc
-+#      ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-+#      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-+#      COMMENT "Generating API documentation with Doxygen.." VERBATIM)
-+#  endif()
-+#endif()
-
+-
  # when ON - will install libwallet_merged into "lib"
  option(BUILD_GUI_DEPS "Build GUI dependencies." OFF)
-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 3b71c38c..bbdeba8d 100644
---- a/src/CMakeLists.txt
-+++ b/src/CMakeLists.txt
-@@ -30,6 +30,7 @@
-
- if (WIN32 OR STATIC)
-   add_definitions(-DSTATICLIB)
-+  add_definitions(-DUSE_DEVICE_LEDGER=0)
-   # miniupnp changed their static define
-   add_definitions(-DMINIUPNP_STATICLIB)
- endif ()
+ 
+diff --git a/Makefile b/Makefile
+index b725d18..8dc8392 100644
+--- a/Makefile
++++ b/Makefile
+@@ -68,7 +68,7 @@ release-all:
+ 
+ release-static:
+ 	mkdir -p build/release
+-	cd build/release && cmake -D STATIC=ON -D ARCH="x86-64" -D BUILD_64=ON -D CMAKE_BUILD_TYPE=release ../.. && $(MAKE)
++	cd build/release && cmake -D USE_DEVICE_LEDGER=0 -D STATIC=ON -D ARCH="x86-64" -D BUILD_64=ON -D CMAKE_BUILD_TYPE=release ../.. && $(MAKE)
+ 
+ coverage:
+ 	mkdir -p build/debug
 diff --git a/src/simplewallet/simplewallet.cpp b/src/simplewallet/simplewallet.cpp
-index d2acf518..f935c6ea 100755
+index d2acf51..0f6494f 100755
 --- a/src/simplewallet/simplewallet.cpp
 +++ b/src/simplewallet/simplewallet.cpp
 @@ -3488,12 +3488,7 @@ bool simple_wallet::ask_wallet_create_if_needed()
@@ -111,7 +97,7 @@ index d2acf518..f935c6ea 100755
 -  boost::replace_nth(seed, " ", 15, "\n");
 -  boost::replace_nth(seed, " ", 7, "\n");
 -  // don't log
-+  success_msg_writer(true) << "**********************************************************************\n";
++  success_msg_writer(true) << "**********************************************************************SEED\n";
    std::cout << seed << std::endl;
  }
  //----------------------------------------------------------------------------------------------------
@@ -154,29 +140,30 @@ index d2acf518..f935c6ea 100755
  }
  //----------------------------------------------------------------------------------------------------
  boost::optional<tools::password_container> simple_wallet::get_and_verify_password() const
-@@ -4299,11 +4265,9 @@ boost::optional<epee::wipeable_string> simple_wallet::new_wallet(const boost::pr
+@@ -4299,12 +4265,9 @@ boost::optional<epee::wipeable_string> simple_wallet::new_wallet(const boost::pr
      "your wallet again (your wallet keys are NOT at risk in any case).\n")
    ;
-
+ 
 -  if (!two_random)
 -  {
 -    print_seed(electrum_words);
 -  }
 -  success_msg_writer() << "**********************************************************************";
+-
 +  success_msg_writer() << "******************************************************************SEED";
 +  success_msg_writer() << electrum_words;
 +  success_msg_writer() << "******************************************************************SEED";
-
    return std::move(password);
  }
+ //----------------------------------------------------------------------------------------------------
 diff --git a/src/wallet/wallet2.cpp b/src/wallet/wallet2.cpp
-index 1bb9f52b..c9fdecc5 100755
+index 1bb9f52..c9fdecc 100755
 --- a/src/wallet/wallet2.cpp
 +++ b/src/wallet/wallet2.cpp
 @@ -2952,6 +2952,13 @@ bool wallet2::load_keys(const std::string& keys_file_name, const epee::wipeable_
        return false;
    }
-
+ 
 +  m_ask_password = false;
 +  m_always_confirm_transfers = false;
 +  m_confirm_subaddress = false;
@@ -188,24 +175,24 @@ index 1bb9f52b..c9fdecc5 100755
    if (r && m_key_on_device) {
      LOG_PRINT_L0("Account on device. Initing device...");
 diff --git a/src/wallet/wallet_args.cpp b/src/wallet/wallet_args.cpp
-index fcd9cc0f..5c0cebdb 100644
+index fcd9cc0..ad0c3cc 100644
 --- a/src/wallet/wallet_args.cpp
 +++ b/src/wallet/wallet_args.cpp
 @@ -122,7 +122,7 @@ namespace wallet_args
      command_line::add_arg(desc_params, arg_max_concurrency);
      command_line::add_arg(desc_params, arg_config_file);
-
+ 
 -    i18n_set_language("translations", "monero", lang);
 +    i18n_set_language("translations", "monero", "en");
-
+ 
      po::options_description desc_all;
      desc_all.add(desc_general).add(desc_params);
 @@ -134,7 +134,7 @@ namespace wallet_args
-
+ 
        if (command_line::get_arg(vm, command_line::arg_help))
        {
 -        Print(print) << "Wownero '" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")" << ENDL;
-+        Print(print) << "Wownero Light'" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")" << ENDL;
++        Print(print) << "Wownero Light '" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")" << ENDL;
          Print(print) << wallet_args::tr("This is the command line wownero wallet. It needs to connect to a wownero\n"
  												  "daemon to work correctly.") << ENDL;
          Print(print) << wallet_args::tr("Usage:") << ENDL << "  " << usage;
@@ -214,16 +201,17 @@ index fcd9cc0f..5c0cebdb 100644
        else if (command_line::get_arg(vm, command_line::arg_version))
        {
 -        Print(print) << "Wownero '" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")";
-+        Print(print) << "Wownero Light'" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")";
++        Print(print) << "Wownero Light '" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")";
          return false;
        }
-
+ 
 @@ -190,7 +190,7 @@ namespace wallet_args
      if (!command_line::is_arg_defaulted(vm, arg_max_concurrency))
        tools::set_max_concurrency(command_line::get_arg(vm, arg_max_concurrency));
-
+ 
 -    Print(print) << "Wownero '" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")";
-+    Print(print) << "Wownero Light'" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")";
-
++    Print(print) << "Wownero Light '" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")";
+ 
      if (!command_line::is_arg_defaulted(vm, arg_log_level))
        MINFO("Setting log level = " << command_line::get_arg(vm, arg_log_level));
+
