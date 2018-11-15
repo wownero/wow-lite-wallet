@@ -362,6 +362,11 @@ export class WowRpc {
         this._wallet_path = wallet_path;
         this._cli_wallet_password = wallet_password;
 
+        if(typeof this._cli_daemon_address == 'undefined'){
+            // this is some truly stupid hacky shit
+            this._cli_daemon_address = 'node.wowne.ro:34568';
+        }
+
         let cli_args = ['--daemon-address', this._cli_daemon_address];
         cli_args = cli_args.concat(this._cli_args_default);
         cli_args.push('--wallet-file');
