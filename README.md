@@ -1,6 +1,3 @@
-# wowlight
-
-
 ![](https://light.wownero.com/wowlight.png)
 
 Simple wrapper for `wownero-wallet-cli` as a GUI.
