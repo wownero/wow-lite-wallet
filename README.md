@@ -3,13 +3,15 @@
 
 ![](https://light.wownero.com/wowlight.png)
 
-Wownero wallet full of questionable development practices.
+Simple wrapper for `wownero-wallet-cli` as a GUI.
 
 - Electron/Vue.js
 - Remote node only
+- Works without a backend - (you are in charge of your private keys)
 - 100% WOW
+- Safu™
 
-Download: [https://light.wownero.com](https://light.wownero.com)
+Download: [https://github.com/wownero/Wownero-Light-Wallet/releases](https://github.com/wownero/Wownero-Light-Wallet/releases)
 
 See `Install.md` for compilation instructions.
 
