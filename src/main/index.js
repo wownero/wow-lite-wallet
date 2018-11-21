@@ -22,7 +22,7 @@ const fs = require('fs');
 const utils = require('electron-util');
 
 let homedir = process.env.HOME;
-if (process.platform == 'win32'){
+if (process.platform === 'win32'){
     homedir = process.env.HOMEPATH; // back-compat
     if (!fs.existsSync(path.join(homedir, 'Wownero')))
         homedir = process.env.USERPROFILE;
