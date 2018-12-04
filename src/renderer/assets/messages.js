@@ -83,6 +83,8 @@ export const messages = [
     'Sending all funds to wownero.win',
     'Shaving away klubus and grumbo',
     'Contacting Stealy for more plumbus',
-    'Rebuilding WinoBot!'
-]
-
+    'Rebuilding WinoBot!',
+    'He who runs, doesn\'t walk!',
+    'Downloading Shaggy_Complete_Collection.zip [148 GB left]',
+    'Arrays start at 1!'
+];
