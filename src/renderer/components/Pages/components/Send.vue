@@ -123,7 +123,7 @@
             validate(){
                 this.error = '';
                 let form = jQuery('#sendForm');
-                let regexp_address = /(W[o|W][a-zA-Z0-9]{95})/g;
+                let regexp_address = /(W[o|W][a-zA-Z0-9]{95})|(So[a-zA-Z0-9]{106})/g;
                 let address = form.find('textarea.address').val().trim();
                 let amount = form.find('input.amount').val().trim();
                 let usd = jQuery('form#sendForm .amount label small');
