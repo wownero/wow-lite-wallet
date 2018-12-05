@@ -179,6 +179,12 @@
             this.$electron.ipcRenderer.on('rpc_monies_sent_error', (event, data) => {
                 this.error = data.message;
             });
+
+            this.$electron.ipcRenderer.on('rpc_monies_sent', () => {
+                const form = jQuery('#sendForm');
+                form.find('textarea.address').val('');
+                form.find('input.amount').val('');
+            });
         }
     }
 </script>
