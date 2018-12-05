@@ -144,7 +144,7 @@
                     return invalid();
                 }
 
-                if((amount == 0)){
+                if((amount === 0)){
                     //this.error = 'Invalid WOW amount';
                     usd.html('');
                     return invalid();

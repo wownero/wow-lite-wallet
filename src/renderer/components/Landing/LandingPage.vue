@@ -128,6 +128,10 @@
                 this.$store.commit('showPassword', {
                     'message': 'Enter wallet password'
                 });
+
+                setTimeout(() => {
+                    jQuery('#password').focus();
+                }, 50);
             }
         },
         mounted() {
