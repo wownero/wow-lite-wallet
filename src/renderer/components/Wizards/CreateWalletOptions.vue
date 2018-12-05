@@ -67,12 +67,20 @@
                     this.create_wallet(wallet_name, wallet_pass);
                 }
             },
+            wallet_exists (name) {
+                return !!this.wallets.find(i => i.name === name);
+            },
             create_wallet (name, password) {
-                this.clearMatrixMsg();
-                this.showMatrixMsg('GENERATING NEW WALLET')
+                if (this.wallet_exists(name)) {
+                    console.log('Wallet exists!')
+                    // @TODO check if wallet with same name exists no matter the path
+                } else {
+                    this.clearMatrixMsg();
+                    this.showMatrixMsg('GENERATING NEW WALLET');
 
-                this.$store.commit('appState', "create_wallet");
-                ipcRenderer.send('rpc_create_wallet', {name: name, password: password})
+                    this.$store.commit('appState', "create_wallet");
+                    ipcRenderer.send('rpc_create_wallet', {name: name, password: password})
+                }
             },
             showMatrixMsg(msg){
                 let obj = jQuery('.teh_matrix span.centered');
@@ -179,6 +187,9 @@
             },
             walletCreating(){
                 return this.$store.state.wallet_creating;
+            },
+            wallets() {
+                return this.$store.getters.cfg.wallets;
             }
         }
     }

@@ -22,7 +22,7 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a v-on:click="openWallet" class="dropdown-item" href="#">Browse</a>
-                        <a v-on:click="openLastWallet" v-if="cfg_wallet_path !== ''" class="dropdown-item" href="#">{{cfg_wallet_path_name}}</a>
+                        <a v-on:click="openLastWallet" v-for="item in cfg_wallet_names" class="dropdown-item" href="#">{{item}}</a>
                     </div>
                 </div>
 
@@ -118,13 +118,9 @@
                     }
                 });
             },
-            openLastWallet(){
-                if(!this.cfg_wallet_path || this.cfg_wallet_path === ''){
-                    alert('Invalid wallet path?!');
-                    return;
-                }
-
-                this.$store.commit('addWalletPath', this.cfg_wallet_path);
+            openLastWallet(event){
+                const selectedWallet = this.cfg_wallets.find(i => i.name === event.currentTarget.text);
+                this.$store.commit('addWalletPath', selectedWallet.path);
                 this.$store.commit('showPassword', {
                     'message': 'Enter wallet password'
                 });
@@ -192,12 +188,11 @@
             selected_node(){
                 return this.$store.getters.cfg.node;
             },
-            cfg_wallet_path(){
-                return this.$store.getters.cfg.wallet_path;
+            cfg_wallets(){
+                return this.$store.getters.cfg.wallets;
             },
-            cfg_wallet_path_name(){
-                let path = require("path");
-                return path.basename(this.cfg_wallet_path);
+            cfg_wallet_names(){
+                return this.$store.getters.cfg.wallets.map(i => i.name);
             }
         }
     }
