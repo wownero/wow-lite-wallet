@@ -31,6 +31,10 @@
                     <i class="fa fa-cog" aria-hidden="true"></i>
                     Settings
                 </button>
+
+                <button type="button" class="btn btn-success btn-sm">
+                    Does nothing
+                </button>
             </div>
 
             <div class="col-sm-5">
