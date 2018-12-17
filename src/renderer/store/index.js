@@ -11,7 +11,7 @@ export default new Vuex.Store({
         cfg: {
             "node": "",
             "nodes": [],
-            "wallet_path": ""
+            "wallets": []
         },
         created_wallet: {},  // only used when creating wallets
         appState: "",  // not really used
@@ -68,6 +68,10 @@ export default new Vuex.Store({
 
             if(data.hasOwnProperty('wallet_path')){
                 cfg.wallet_path = data.wallet_path;
+            }
+
+            if(data.hasOwnProperty('wallets')){
+                cfg.wallets = data.wallets;
             }
         },
         appState(state, data){

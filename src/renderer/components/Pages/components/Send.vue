@@ -123,7 +123,7 @@
             validate(){
                 this.error = '';
                 let form = jQuery('#sendForm');
-                let regexp_address = /(W[o|W][a-zA-Z0-9]{95})/g;
+                let regexp_address = /(W[o|W][a-zA-Z0-9]{95})|(So[a-zA-Z0-9]{106})/g;
                 let address = form.find('textarea.address').val().trim();
                 let amount = form.find('input.amount').val().trim();
                 let usd = jQuery('form#sendForm .amount label small');
@@ -144,7 +144,7 @@
                     return invalid();
                 }
 
-                if((amount == 0)){
+                if((amount === 0)){
                     //this.error = 'Invalid WOW amount';
                     usd.html('');
                     return invalid();
@@ -178,6 +178,12 @@
         mounted () {
             this.$electron.ipcRenderer.on('rpc_monies_sent_error', (event, data) => {
                 this.error = data.message;
+            });
+
+            this.$electron.ipcRenderer.on('rpc_monies_sent', () => {
+                const form = jQuery('#sendForm');
+                form.find('textarea.address').val('');
+                form.find('input.amount').val('');
             });
         }
     }

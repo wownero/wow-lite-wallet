@@ -31,7 +31,7 @@ export class Config {
                 {"address": "node.wownero.com:34568", "location": "Montreal, Canada", "region": "US"},
                 {"address": "localhost:34568", 'location': "", "region": "*"}
             ],
-            "wallet_path": ""
+            "wallets": []
         });
 
         fs.writeFileSync(this._path_cfg, JSON.stringify(data));
@@ -69,7 +69,8 @@ export class Config {
             return;
         }
 
-        this.data.wallet_path = path;
+        const name = path.split('/').pop();
+        this.data.wallets.push({ name, path });
         this.save();
     }
 }

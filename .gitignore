@@ -10,3 +10,5 @@ thumbs.db
 !.gitkeep
 .idea
 wowlight
+package-lock.json
+*.log
