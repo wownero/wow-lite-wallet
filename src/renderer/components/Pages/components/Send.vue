@@ -12,7 +12,7 @@
                             <!-- text input -->
                             <div class="form-group">
                                 <label>Destination address</label>
-                                <textarea placeholder="WO..." rows=1 v-on:input="validate" class="form-control address"></textarea>
+                                <textarea placeholder="WO/SO..." rows=1 v-on:input="validate" class="form-control address"></textarea>
                             </div>
 
                             <div class="row">
@@ -123,7 +123,7 @@
             validate(){
                 this.error = '';
                 let form = jQuery('#sendForm');
-                let regexp_address = /(W[o|W][a-zA-Z0-9]{95})|(So[a-zA-Z0-9]{106})/g;
+                let regexp_address = /([S|W][o|W][a-zA-Z0-9]{95})|(So[a-zA-Z0-9]{106})/g;
                 let address = form.find('textarea.address').val().trim();
                 let amount = form.find('input.amount').val().trim();
                 let usd = jQuery('form#sendForm .amount label small');
