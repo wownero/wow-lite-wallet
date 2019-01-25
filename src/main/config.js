@@ -61,6 +61,7 @@ export class Config {
     }
 
     saveLastWalletPath(path){
+        console.log(this.data);
         if (typeof this.data === 'string' || this.data instanceof String){
             this.data = JSON.parse(this.data);
         }
@@ -69,6 +70,10 @@ export class Config {
             return;
         }
 
+        if(!this.data.hasOwnProperty('wallets')){
+            this.data.wallets = [];
+        }
+        
         const name = path.split('/').pop();
         this.data.wallets.push({ name, path });
         this.save();
