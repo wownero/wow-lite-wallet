@@ -89,6 +89,7 @@ export class WowRpc {
         if(this._state === 5){
             this._sendCmd('show_transfers');
             this._sendCmd('balance');
+            this._sendCmd('save');
             setTimeout(this._checkMemPool.bind(this), this._checkMemPoolTimeout);
         }
     }
@@ -136,6 +137,12 @@ export class WowRpc {
             while ((matches = re_incoming_tx.exec(data)) !== null) {
                 this._paymentReceived(matches[1], matches[2]);
             }
+        }
+
+        // detect background mining prompt
+        let re_background_mining = /Do you want to do it now?/g;
+        if(data.match(re_background_mining)){
+            this._sendCmd("No\n");
         }
 
         if(this._state === 5 && data.match(/Error: invalid password/)){
@@ -275,22 +282,22 @@ export class WowRpc {
         // }
 
         if(data.match(/Background refresh thread started/)){
-            let re_addy = /Generated new wallet: (W[o|W][a-zA-Z0-9]{95})/
+            let re_addy = /Generated new wallet: (W[o|W][a-zA-Z0-9]{95})/;
             let re_addy_match = this._buffer.match(re_addy);
             if(re_addy_match){
                 this._create_wallet['address'] = re_addy_match[1];
             }
 
-            let re_view_key = /View key: ([0-9a-fA-F]+)\n/
+            let re_view_key = /View key: ([0-9a-fA-F]+)\n/;
             let re_view_key_match = this._buffer.match(re_view_key);
             if(re_view_key_match){
                 this._create_wallet['view_key'] = re_view_key_match[1];
             }
 
-            let re_seed = /\*\*\*\*\*\*SEED\n(.*)\n\*\*/
-            let re_seed_match = this._buffer.match(re_seed);
+            let re_seed_lol = /(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+ )(\w+)/g;
+            let re_seed_match = this._buffer.match(re_seed_lol);
             if(re_seed_match){
-                let seed = re_seed_match[1].trim();
+                let seed = re_seed_match[0].trim();
                 if(seed.split(' ').length !== 25){
                     this.onCreateWalletFinished("could not get seed; invalid num words");
                 }

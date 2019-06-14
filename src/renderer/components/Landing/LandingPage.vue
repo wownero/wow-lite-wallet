@@ -15,16 +15,10 @@
                     Create wallet
                 </button>
 
-                <div class="dropdown" style="display: inline-block;">
-                    <button class="btn btn-success btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-folder-open" aria-hidden="true"></i>
-                        Open wallet
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a v-on:click="openWallet" class="dropdown-item" href="#">Browse</a>
-                        <a v-on:click="openLastWallet" v-for="item in cfg_wallet_names" class="dropdown-item" href="#">{{item}}</a>
-                    </div>
-                </div>
+                <button id="create_wallet_btn" v-on:click="openWallet" type="button" class="btn btn-success btn-sm">
+                    <i class="fa fa-plus" id="create_wallet_icon" aria-hidden="true"></i>
+                    Open wallet
+                </button>
 
                 <button id="" v-on:click="settings" type="button" class="btn btn-success btn-sm">
                     <!-- fa fa-refresh fa-spin -->
@@ -141,8 +135,7 @@
                 this.$store.commit('addRate', response.data.usd);
             });
 
-            let appVersion = require('electron').remote.app.getVersion();
-            axios.get(`https://funding.wownero.com/api/1/wowlight?version=${appVersion}`).then(response => {
+            axios.get(`https://funding.wownero.com/api/1/wowlight?version=0.1.3`).then(response => {
                 if(response.data.data === false) {
                     const {dialog} = require('electron').remote
                     const dialogOptions = {

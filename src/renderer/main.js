@@ -10,7 +10,7 @@ const EventBus = new Vue();
 export default EventBus;
 
 import { shell } from 'electron'
-
+window.jQuery = window.$ = require('jquery');
 
 /* eslint-disable no-new */
 let app = new Vue({

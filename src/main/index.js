@@ -216,7 +216,6 @@ ipcMain.on('rpc_kill_wallet', (event) => {
 
 ipcMain.on('rpc_open_wallet', (event, data) => {
     wallet.onWalletOpened = function(data){
-        cfg.saveLastWalletPath(data.wallet_path);
         event.sender.send('rpc_wallet_opened', data);
     }
 
