@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-md">
         <div class="container nopadding nomargin">
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand" href="#">
                 <img id="logo" src="~@/assets/wownero.png">
             </a>
 

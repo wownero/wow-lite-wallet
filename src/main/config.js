@@ -27,6 +27,7 @@ export class Config {
             "node": "node.wowne.ro:34568",
             "nodes": [
                 {"address": "node.wowne.ro:34568", "location": "New Jersey, United States", "region": "US"},
+                {"address": "wow.aluisyo.network:34568", "location": "The Moon", "region": "Moon"},
                 {"address": "localhost:34568", 'location': "", "region": "*"}
             ],
             "wallets": []
