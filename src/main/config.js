@@ -27,8 +27,6 @@ export class Config {
             "node": "node.wowne.ro:34568",
             "nodes": [
                 {"address": "node.wowne.ro:34568", "location": "New Jersey, United States", "region": "US"},
-                {"address": "node.pwned.systems:34568", "location": "Amsterdam, The Netherlands", "region": "EU"},
-                {"address": "node.wownero.com:34568", "location": "Montreal, Canada", "region": "US"},
                 {"address": "localhost:34568", 'location': "", "region": "*"}
             ],
             "wallets": []
@@ -58,24 +56,5 @@ export class Config {
         this.save();
 
         return true;
-    }
-
-    saveLastWalletPath(path){
-        console.log(this.data);
-        if (typeof this.data === 'string' || this.data instanceof String){
-            this.data = JSON.parse(this.data);
-        }
-
-        if(path === ''){
-            return;
-        }
-
-        if(!this.data.hasOwnProperty('wallets')){
-            this.data.wallets = [];
-        }
-        
-        const name = path.split('/').pop();
-        this.data.wallets.push({ name, path });
-        this.save();
     }
 }
