@@ -1,124 +1,57 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index c3dc88b..2ed8ddf 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -103,6 +103,8 @@ if(NOT CMAKE_BUILD_TYPE)
- endif()
- string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_LOWER)
- 
-+add_definitions(-DUSE_DEVICE_LEDGER=0)
-+
- # ARCH defines the target architecture, either by an explicit identifier or
- # one of the following two keywords. By default, ARCH a value of 'native':
- # target arch = host arch, binary is not portable. When ARCH is set to the
-@@ -425,8 +427,6 @@ if(STATIC AND NOT IOS)
-   endif()
- endif()
- 
--find_package(PCSC)
--
- add_definition_if_library_exists(c memset_s "string.h" HAVE_MEMSET_S)
- add_definition_if_library_exists(c explicit_bzero "strings.h" HAVE_EXPLICIT_BZERO)
- add_definition_if_function_found(strptime HAVE_STRPTIME)
-@@ -466,14 +466,8 @@ endif()
- include_directories(${LIBUNWIND_INCLUDE})
- link_directories(${LIBUNWIND_LIBRARY_DIRS})
- 
--# Final setup for libpcsc
--if (PCSC_FOUND) 
--  message(STATUS "Using PCSC include dir at ${PCSC_INCLUDE_DIR}")
--  add_definitions(-DHAVE_PCSC)
--  include_directories(${PCSC_INCLUDE_DIR})
--  link_directories(${LIBPCSC_LIBRARY_DIRS})
--else (PCSC_FOUND)
--  message(STATUS "Could not find PCSC")
-+if(USE_DEVICE_LEDGER)
-+  set(USE_DEVICE_LEDGER 0)
- endif()
- 
- if(MSVC)
-@@ -904,32 +898,6 @@ endif()
- add_subdirectory(contrib)
- add_subdirectory(src)
- 
--if(BUILD_TESTS)
--  add_subdirectory(tests)
--endif()
--
--if(BUILD_DOCUMENTATION)
--  set(DOC_GRAPHS "YES" CACHE STRING "Create dependency graphs (needs graphviz)")
--  set(DOC_FULLGRAPHS "NO" CACHE STRING "Create call/callee graphs (large)")
--
--  find_program(DOT_PATH dot)
--
--  if (DOT_PATH STREQUAL "DOT_PATH-NOTFOUND")
--    message("Doxygen: graphviz not found - graphs disabled")
--    set(DOC_GRAPHS "NO")
--  endif()
--
--  find_package(Doxygen)
--  if(DOXYGEN_FOUND)
--    configure_file("cmake/Doxyfile.in" "Doxyfile" @ONLY)
--    configure_file("cmake/Doxygen.extra.css.in" "Doxygen.extra.css" @ONLY)
--    add_custom_target(doc
--      ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
--      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
--      COMMENT "Generating API documentation with Doxygen.." VERBATIM)
--  endif()
--endif()
--
- # when ON - will install libwallet_merged into "lib"
- option(BUILD_GUI_DEPS "Build GUI dependencies." OFF)
- 
-diff --git a/Makefile b/Makefile
-index b725d18..8dc8392 100644
---- a/Makefile
-+++ b/Makefile
-@@ -68,7 +68,7 @@ release-all:
- 
- release-static:
- 	mkdir -p build/release
--	cd build/release && cmake -D STATIC=ON -D ARCH="x86-64" -D BUILD_64=ON -D CMAKE_BUILD_TYPE=release ../.. && $(MAKE)
-+	cd build/release && cmake -D USE_DEVICE_LEDGER=0 -D STATIC=ON -D ARCH="x86-64" -D BUILD_64=ON -D CMAKE_BUILD_TYPE=release ../.. && $(MAKE)
- 
- coverage:
- 	mkdir -p build/debug
 diff --git a/src/simplewallet/simplewallet.cpp b/src/simplewallet/simplewallet.cpp
-index d2acf51..0f6494f 100755
+index 94b116a89..86f8058a3 100644
 --- a/src/simplewallet/simplewallet.cpp
 +++ b/src/simplewallet/simplewallet.cpp
-@@ -3488,12 +3488,7 @@ bool simple_wallet::ask_wallet_create_if_needed()
+@@ -3875,26 +3875,8 @@ bool simple_wallet::ask_wallet_create_if_needed()
   */
- void simple_wallet::print_seed(std::string seed)
+ void simple_wallet::print_seed(const epee::wipeable_string &seed)
  {
--  success_msg_writer(true) << "\n" << tr("NOTE: the following 25 words can be used to recover access to your wallet. "
+-  success_msg_writer(true) << "\n" << boost::format(tr("NOTE: the following %s can be used to recover access to your wallet. "
 -    "Write them down and store them somewhere safe and secure. Please do not store them in "
--    "your email or on file storage services outside of your immediate control.\n");
--  boost::replace_nth(seed, " ", 15, "\n");
--  boost::replace_nth(seed, " ", 7, "\n");
+-    "your email or on file storage services outside of your immediate control.\n")) % (m_wallet->multisig() ? tr("string") : tr("25 words"));
 -  // don't log
+-  int space_index = 0;
+-  size_t len  = seed.size();
+-  for (const char *ptr = seed.data(); len--; ++ptr)
+-  {
+-    if (*ptr == ' ')
+-    {
+-      if (space_index == 15 || space_index == 7)
+-        putchar('\n');
+-      else
+-        putchar(*ptr);
+-      ++space_index;
+-    }
+-    else
+-      putchar(*ptr);
+-  }
+-  putchar('\n');
 +  success_msg_writer(true) << "**********************************************************************SEED\n";
-   std::cout << seed << std::endl;
++  seed.data();
+   fflush(stdout);
  }
  //----------------------------------------------------------------------------------------------------
-@@ -4169,37 +4164,8 @@ bool simple_wallet::try_connect_to_daemon(bool silent, uint32_t* version)
+@@ -4639,40 +4621,9 @@ bool simple_wallet::try_connect_to_daemon(bool silent, uint32_t* version)
+  */
  std::string simple_wallet::get_mnemonic_language()
  {
-   std::vector<std::string> language_list;
+-  std::vector<std::string> language_list_self, language_list_english;
+-  const std::vector<std::string> &language_list = m_use_english_language_names ? language_list_english : language_list_self;
 -  std::string language_choice;
 -  int language_number = -1;
-   crypto::ElectrumWords::get_language_list(language_list, m_use_english_language_names);
+-  crypto::ElectrumWords::get_language_list(language_list_self, false);
+-  crypto::ElectrumWords::get_language_list(language_list_english, true);
 -  std::cout << tr("List of available languages for your wallet's seed:") << std::endl;
 -  std::cout << tr("If your display freezes, exit blind with ^C, then run again with --use-english-language-names") << std::endl;
 -  int ii;
--  std::vector<std::string>::iterator it;
+-  std::vector<std::string>::const_iterator it;
 -  for (it = language_list.begin(), ii = 0; it != language_list.end(); it++, ii++)
 -  {
 -    std::cout << ii << " : " << *it << std::endl;
 -  }
 -  while (language_number < 0)
 -  {
--    language_choice = input_line(tr("Enter the number corresponding to the language of your choice: "));
+-    language_choice = input_line(tr("Enter the number corresponding to the language of your choice"));
 -    if (std::cin.eof())
 -      return std::string();
 -    try
@@ -135,12 +68,14 @@ index d2acf51..0f6494f 100755
 -      fail_msg_writer() << tr("invalid language choice entered. Please try again.\n");
 -    }
 -  }
--  return language_list[language_number];
+-  return language_list_self[language_number];
++  std::vector<std::string> language_list;
++  crypto::ElectrumWords::get_language_list(language_list, m_use_english_language_names);
 +  return language_list[1];
  }
  //----------------------------------------------------------------------------------------------------
  boost::optional<tools::password_container> simple_wallet::get_and_verify_password() const
-@@ -4299,12 +4265,9 @@ boost::optional<epee::wipeable_string> simple_wallet::new_wallet(const boost::pr
+@@ -4777,11 +4728,9 @@ boost::optional<epee::wipeable_string> simple_wallet::new_wallet(const boost::pr
      "your wallet again (your wallet keys are NOT at risk in any case).\n")
    ;
  
@@ -149,69 +84,52 @@ index d2acf51..0f6494f 100755
 -    print_seed(electrum_words);
 -  }
 -  success_msg_writer() << "**********************************************************************";
--
 +  success_msg_writer() << "******************************************************************SEED";
-+  success_msg_writer() << electrum_words;
++  print_seed(electrum_words);
 +  success_msg_writer() << "******************************************************************SEED";
-   return std::move(password);
+ 
+   return password;
  }
- //----------------------------------------------------------------------------------------------------
 diff --git a/src/wallet/wallet2.cpp b/src/wallet/wallet2.cpp
-index 1bb9f52..c9fdecc 100755
+index 9c08708e4..a4e3bc1f6 100644
 --- a/src/wallet/wallet2.cpp
 +++ b/src/wallet/wallet2.cpp
-@@ -2952,6 +2952,13 @@ bool wallet2::load_keys(const std::string& keys_file_name, const epee::wipeable_
-       return false;
-   }
- 
-+  m_ask_password = false;
+@@ -1115,7 +1115,7 @@ wallet2::wallet2(network_type nettype, uint64_t kdf_rounds, bool unattended):
+   m_trusted_daemon(false),
+   m_nettype(nettype),
+   m_multisig_rounds_passed(0),
+-  m_always_confirm_transfers(true),
++  m_always_confirm_transfers(false),
+   m_print_ring_members(false),
+   m_store_tx_info(true),
+   m_default_mixin(0),
+@@ -1126,13 +1126,13 @@ wallet2::wallet2(network_type nettype, uint64_t kdf_rounds, bool unattended):
+   m_refresh_from_block_height(0),
+   m_explicit_refresh_from_block_height(true),
+   m_confirm_non_default_ring_size(true),
+-  m_ask_password(AskPasswordOnAction),
++  m_ask_password(AskPasswordNever),
+   m_min_output_count(0),
+   m_min_output_value(0),
+   m_merge_destinations(false),
+-  m_confirm_backlog(true),
++  m_confirm_backlog(false),
+   m_confirm_backlog_threshold(0),
+-  m_confirm_export_overwrite(true),
++  m_confirm_export_overwrite(false),
+   m_auto_low_priority(true),
+   m_segregate_pre_fork_outputs(false),
+   m_key_reuse_mitigation2(false),
+@@ -3900,6 +3900,12 @@ void wallet2::change_password(const std::string &filename, const epee::wipeable_
+  */
+ bool wallet2::load_keys(const std::string& keys_file_name, const epee::wipeable_string& password)
+ {
++  m_ask_password = AskPasswordNever;
 +  m_always_confirm_transfers = false;
-+  m_confirm_subaddress = false;
 +  m_confirm_backlog = false;
 +  m_confirm_export_overwrite = false;
 +  m_confirm_non_default_ring_size = true;
 +
-   r = epee::serialization::load_t_from_binary(m_account, account_data);
-   if (r && m_key_on_device) {
-     LOG_PRINT_L0("Account on device. Initing device...");
-diff --git a/src/wallet/wallet_args.cpp b/src/wallet/wallet_args.cpp
-index fcd9cc0..ad0c3cc 100644
---- a/src/wallet/wallet_args.cpp
-+++ b/src/wallet/wallet_args.cpp
-@@ -122,7 +122,7 @@ namespace wallet_args
-     command_line::add_arg(desc_params, arg_max_concurrency);
-     command_line::add_arg(desc_params, arg_config_file);
- 
--    i18n_set_language("translations", "monero", lang);
-+    i18n_set_language("translations", "monero", "en");
- 
-     po::options_description desc_all;
-     desc_all.add(desc_general).add(desc_params);
-@@ -134,7 +134,7 @@ namespace wallet_args
- 
-       if (command_line::get_arg(vm, command_line::arg_help))
-       {
--        Print(print) << "Wownero '" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")" << ENDL;
-+        Print(print) << "Wownero Light '" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")" << ENDL;
-         Print(print) << wallet_args::tr("This is the command line wownero wallet. It needs to connect to a wownero\n"
- 												  "daemon to work correctly.") << ENDL;
-         Print(print) << wallet_args::tr("Usage:") << ENDL << "  " << usage;
-@@ -143,7 +143,7 @@ namespace wallet_args
-       }
-       else if (command_line::get_arg(vm, command_line::arg_version))
-       {
--        Print(print) << "Wownero '" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")";
-+        Print(print) << "Wownero Light '" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")";
-         return false;
-       }
- 
-@@ -190,7 +190,7 @@ namespace wallet_args
-     if (!command_line::is_arg_defaulted(vm, arg_max_concurrency))
-       tools::set_max_concurrency(command_line::get_arg(vm, arg_max_concurrency));
- 
--    Print(print) << "Wownero '" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")";
-+    Print(print) << "Wownero Light '" << MONERO_RELEASE_NAME << "' (v" << MONERO_VERSION_FULL << ")";
- 
-     if (!command_line::is_arg_defaulted(vm, arg_log_level))
-       MINFO("Setting log level = " << command_line::get_arg(vm, arg_log_level));
-
+   rapidjson::Document json;
+   wallet2::keys_file_data keys_file_data;
+   std::string buf;
