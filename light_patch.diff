@@ -1,8 +1,8 @@
 diff --git a/src/simplewallet/simplewallet.cpp b/src/simplewallet/simplewallet.cpp
-index 94b116a89..86f8058a3 100644
+index c532b3764..44145a61a 100644
 --- a/src/simplewallet/simplewallet.cpp
 +++ b/src/simplewallet/simplewallet.cpp
-@@ -3875,26 +3875,8 @@ bool simple_wallet::ask_wallet_create_if_needed()
+@@ -3875,23 +3875,10 @@ bool simple_wallet::ask_wallet_create_if_needed()
   */
  void simple_wallet::print_seed(const epee::wipeable_string &seed)
  {
@@ -10,10 +10,10 @@ index 94b116a89..86f8058a3 100644
 -    "Write them down and store them somewhere safe and secure. Please do not store them in "
 -    "your email or on file storage services outside of your immediate control.\n")) % (m_wallet->multisig() ? tr("string") : tr("25 words"));
 -  // don't log
--  int space_index = 0;
--  size_t len  = seed.size();
--  for (const char *ptr = seed.data(); len--; ++ptr)
--  {
+   int space_index = 0;
+   size_t len  = seed.size();
+   for (const char *ptr = seed.data(); len--; ++ptr)
+   {
 -    if (*ptr == ' ')
 -    {
 -      if (space_index == 15 || space_index == 7)
@@ -23,15 +23,10 @@ index 94b116a89..86f8058a3 100644
 -      ++space_index;
 -    }
 -    else
--      putchar(*ptr);
--  }
--  putchar('\n');
-+  success_msg_writer(true) << "**********************************************************************SEED\n";
-+  seed.data();
-   fflush(stdout);
- }
- //----------------------------------------------------------------------------------------------------
-@@ -4639,40 +4621,9 @@ bool simple_wallet::try_connect_to_daemon(bool silent, uint32_t* version)
+       putchar(*ptr);
+   }
+   putchar('\n');
+@@ -4639,40 +4626,9 @@ bool simple_wallet::try_connect_to_daemon(bool silent, uint32_t* version)
   */
  std::string simple_wallet::get_mnemonic_language()
  {
@@ -75,7 +70,7 @@ index 94b116a89..86f8058a3 100644
  }
  //----------------------------------------------------------------------------------------------------
  boost::optional<tools::password_container> simple_wallet::get_and_verify_password() const
-@@ -4777,11 +4728,9 @@ boost::optional<epee::wipeable_string> simple_wallet::new_wallet(const boost::pr
+@@ -4777,11 +4733,9 @@ boost::optional<epee::wipeable_string> simple_wallet::new_wallet(const boost::pr
      "your wallet again (your wallet keys are NOT at risk in any case).\n")
    ;
  
@@ -91,7 +86,7 @@ index 94b116a89..86f8058a3 100644
    return password;
  }
 diff --git a/src/wallet/wallet2.cpp b/src/wallet/wallet2.cpp
-index 9c08708e4..a4e3bc1f6 100644
+index c7135783c..2d94b6236 100644
 --- a/src/wallet/wallet2.cpp
 +++ b/src/wallet/wallet2.cpp
 @@ -1115,7 +1115,7 @@ wallet2::wallet2(network_type nettype, uint64_t kdf_rounds, bool unattended):
