@@ -8,7 +8,6 @@ Simple wrapper for `wownero-wallet-cli` as a GUI.
 - 100% WOW
 - Safu™
 
-Download: [https://github.com/wownero/Wownero-Light-Wallet/releases](https://github.com/wownero/Wownero-Light-Wallet/releases)
 
 See `Install.md` for compilation instructions.
 
