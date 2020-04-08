@@ -4,12 +4,6 @@
             <div class="col-sm-7">
                 <img id="logo" src="~@/assets/wownero-light-intro.png" alt="electron-vue">
 
-                <p>Welcome to wownero light!</p>
-                <ul style="margin-bottom: 22px">
-                    <li>Electron/Vue.js <small>(OSX/Windows/Linux)</small></li>
-                    <li>Works most of the time</li>
-                </ul>
-
                 <button id="create_wallet_btn" v-on:click="createWallet" type="button" class="btn btn-success btn-sm">
                     <i class="fa fa-plus" id="create_wallet_icon" aria-hidden="true"></i>
                     Create wallet
@@ -43,13 +37,6 @@
                                 <small class="location"></small>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="card my-4 wfs-explorer" style="margin-top: 0 !important;">
-                    <h5 class="card-header">Funding required</h5>
-                    <div class="card-body">
-                        <wfs-explorer></wfs-explorer>
                     </div>
                 </div>
             </div>
