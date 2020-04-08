@@ -24,10 +24,13 @@ export class Config {
         }
 
         let data = JSON.stringify({
-            "node": "node.wowne.ro:34568",
+            "node": "wow.candy.surf:34568",
             "nodes": [
-                {"address": "node.wowne.ro:34568", "location": "New Jersey, United States", "region": "US"},
-                {"address": "wow.aluisyo.network:34568", "location": "The Moon", "region": "Moon"},
+                {"address": "wow.candy.surf:34568", "location": "All you can eat.", "region": "WOW"},
+                {"address": "so.wow.candy.surf:34568", "location": "San Francisco, United States", "region": "US"},
+                {"address": "much.wow.candy.surf:34568", "location": "London, England", "region": "UK"},
+                {"address": "such.wow.candy.surf:34568", "location": "Montreal, Canada", "region": "CA"},
+                {"address": "very.wow.candy.surf:34568", "location": "Bangalore, India", "region": "IN"},
                 {"address": "localhost:34568", 'location': "", "region": "*"}
             ],
             "wallets": []
