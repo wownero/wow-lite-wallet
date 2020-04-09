@@ -1,9 +1,9 @@
 {
-    "name": "wowlight",
-    "version": "0.1.3",
+    "name": "wowlite",
+    "version": "0.1.4",
     "__version": "bumping this should also bump LandingPage.vue (version checker)",
-    "author": "dsc <xmrdsc@protonmail.com>",
-    "description": "Wownero Light Wallet",
+    "author": "ride <ridethe@candy.surf >",
+    "description": "Wownero Lite Wallet",
     "license": "WTFPL",
     "main": "./dist/electron/main.js",
     "scripts": {
@@ -18,8 +18,8 @@
         "postinstall": ""
     },
     "build": {
-        "productName": "wowlight",
-        "appId": "org.wownero.wowlight",
+        "productName": "wowlite",
+        "appId": "org.wownero.wowlite",
         "directories": {
             "output": "build"
         },
