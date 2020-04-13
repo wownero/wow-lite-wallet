@@ -1,5 +1,5 @@
 diff --git a/src/simplewallet/simplewallet.cpp b/src/simplewallet/simplewallet.cpp
-index c532b3764..44145a61a 100644
+index c532b3764..6b3243de7 100644
 --- a/src/simplewallet/simplewallet.cpp
 +++ b/src/simplewallet/simplewallet.cpp
 @@ -3875,23 +3875,10 @@ bool simple_wallet::ask_wallet_create_if_needed()
@@ -85,6 +85,24 @@ index c532b3764..44145a61a 100644
  
    return password;
  }
+@@ -6618,17 +6572,6 @@ bool simple_wallet::transfer_main(int transfer_type, const std::vector<std::stri
+         {
+           prompt << tr("WARNING: this is a non default ring size, which may harm your privacy. Default is recommended.");
+         }
+-        prompt << ENDL << tr("Is this okay?");
+-        
+-        std::string accepted = input_line(prompt.str(), true);
+-        if (std::cin.eof())
+-          return false;
+-        if (!command_line::is_yes(accepted))
+-        {
+-          fail_msg_writer() << tr("transaction cancelled.");
+-
+-          return false;
+-        }
+     }
+ 
+     // actually commit the transactions
 diff --git a/src/wallet/wallet2.cpp b/src/wallet/wallet2.cpp
 index c7135783c..2d94b6236 100644
 --- a/src/wallet/wallet2.cpp
