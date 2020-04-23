@@ -1,4 +1,4 @@
-![](https://light.wownero.com/wowlight.png)
+![](https://raw.githubusercontent.com/wiki/qvqc/wowlite/images/wowlite.gif)
 
 Simple wrapper for `wownero-wallet-cli` as a GUI.
 
@@ -8,7 +8,6 @@ Simple wrapper for `wownero-wallet-cli` as a GUI.
 - 100% WOW
 - Safu™
 
-Download: [https://github.com/wownero/Wownero-Light-Wallet/releases](https://github.com/wownero/Wownero-Light-Wallet/releases)
 
 See `Install.md` for compilation instructions.
 

@@ -371,7 +371,7 @@ export class WowRpc {
 
         if(typeof this._cli_daemon_address == 'undefined'){
             // this is some truly stupid hacky shit
-            this._cli_daemon_address = 'node.wowne.ro:34568';
+            this._cli_daemon_address = 'wow.candy.surf:34568';
         }
 
         let cli_args = ['--daemon-address', this._cli_daemon_address];
