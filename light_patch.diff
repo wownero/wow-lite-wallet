@@ -1,8 +1,8 @@
 diff --git a/src/simplewallet/simplewallet.cpp b/src/simplewallet/simplewallet.cpp
-index c532b3764..6b3243de7 100644
+index 69d4652bb..efd04ca68 100644
 --- a/src/simplewallet/simplewallet.cpp
 +++ b/src/simplewallet/simplewallet.cpp
-@@ -3875,23 +3875,10 @@ bool simple_wallet::ask_wallet_create_if_needed()
+@@ -3876,23 +3876,10 @@ bool simple_wallet::ask_wallet_create_if_needed()
   */
  void simple_wallet::print_seed(const epee::wipeable_string &seed)
  {
@@ -26,7 +26,7 @@ index c532b3764..6b3243de7 100644
        putchar(*ptr);
    }
    putchar('\n');
-@@ -4639,40 +4626,9 @@ bool simple_wallet::try_connect_to_daemon(bool silent, uint32_t* version)
+@@ -4640,40 +4627,9 @@ bool simple_wallet::try_connect_to_daemon(bool silent, uint32_t* version)
   */
  std::string simple_wallet::get_mnemonic_language()
  {
@@ -70,7 +70,7 @@ index c532b3764..6b3243de7 100644
  }
  //----------------------------------------------------------------------------------------------------
  boost::optional<tools::password_container> simple_wallet::get_and_verify_password() const
-@@ -4777,11 +4733,9 @@ boost::optional<epee::wipeable_string> simple_wallet::new_wallet(const boost::pr
+@@ -4778,11 +4734,9 @@ boost::optional<epee::wipeable_string> simple_wallet::new_wallet(const boost::pr
      "your wallet again (your wallet keys are NOT at risk in any case).\n")
    ;
  
@@ -85,7 +85,7 @@ index c532b3764..6b3243de7 100644
  
    return password;
  }
-@@ -6618,17 +6572,6 @@ bool simple_wallet::transfer_main(int transfer_type, const std::vector<std::stri
+@@ -6666,17 +6620,6 @@ bool simple_wallet::transfer_main(int transfer_type, const std::vector<std::stri
          {
            prompt << tr("WARNING: this is a non default ring size, which may harm your privacy. Default is recommended.");
          }
@@ -104,10 +104,10 @@ index c532b3764..6b3243de7 100644
  
      // actually commit the transactions
 diff --git a/src/wallet/wallet2.cpp b/src/wallet/wallet2.cpp
-index c7135783c..2d94b6236 100644
+index 4779c3335..e218df7e1 100644
 --- a/src/wallet/wallet2.cpp
 +++ b/src/wallet/wallet2.cpp
-@@ -1115,7 +1115,7 @@ wallet2::wallet2(network_type nettype, uint64_t kdf_rounds, bool unattended):
+@@ -1134,7 +1134,7 @@ wallet2::wallet2(network_type nettype, uint64_t kdf_rounds, bool unattended, std
    m_trusted_daemon(false),
    m_nettype(nettype),
    m_multisig_rounds_passed(0),
@@ -116,7 +116,7 @@ index c7135783c..2d94b6236 100644
    m_print_ring_members(false),
    m_store_tx_info(true),
    m_default_mixin(0),
-@@ -1126,13 +1126,13 @@ wallet2::wallet2(network_type nettype, uint64_t kdf_rounds, bool unattended):
+@@ -1145,13 +1145,13 @@ wallet2::wallet2(network_type nettype, uint64_t kdf_rounds, bool unattended, std
    m_refresh_from_block_height(0),
    m_explicit_refresh_from_block_height(true),
    m_confirm_non_default_ring_size(true),
@@ -133,7 +133,7 @@ index c7135783c..2d94b6236 100644
    m_auto_low_priority(true),
    m_segregate_pre_fork_outputs(false),
    m_key_reuse_mitigation2(false),
-@@ -3900,6 +3900,12 @@ void wallet2::change_password(const std::string &filename, const epee::wipeable_
+@@ -4000,6 +4000,12 @@ void wallet2::change_password(const std::string &filename, const epee::wipeable_
   */
  bool wallet2::load_keys(const std::string& keys_file_name, const epee::wipeable_string& password)
  {
@@ -143,6 +143,6 @@ index c7135783c..2d94b6236 100644
 +  m_confirm_export_overwrite = false;
 +  m_confirm_non_default_ring_size = true;
 +
-   rapidjson::Document json;
-   wallet2::keys_file_data keys_file_data;
-   std::string buf;
+   std::string keys_file_buf;
+   bool r = load_from_file(keys_file_name, keys_file_buf);
+   THROW_WALLET_EXCEPTION_IF(!r, error::file_read_error, keys_file_name);
