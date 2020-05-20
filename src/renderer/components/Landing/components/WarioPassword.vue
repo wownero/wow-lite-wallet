@@ -26,22 +26,22 @@
             wallet() {
                 return this.$store.getters.wallet;
             },
-            usd(){
-                return (this.$store.getters.usd_rate / 1000) * this.$store.getters.wallet.balance;
+            btc(){
+                return (this.$store.getters.btc_rate) * this.$store.getters.wallet.balance;
             },
             bubble_img() {
-                let rate = this.$store.getters.usd_rate;
-                let usd = (rate / 1000) * this.$store.getters.wallet.balance;
+                let rate = this.$store.getters.btc_rate;
+                let btc = rate * this.$store.getters.wallet.balance;
 
-                if(usd < 1){
+                if(btc < 1){
                     return this.path_bubble(0);
-                } else if(usd < 100){
+                } else if(btc < 100){
                     return this.path_bubble(1);
-                } else if(usd < 500){
+                } else if(btc < 500){
                     return this.path_bubble(2);
-                } else if(usd < 1000){
+                } else if(btc < 1000){
                     return this.path_bubble(3);
-                } else if(usd < 1000){
+                } else if(btc < 1000){
                     return this.path_bubble(4);
                 }
             }

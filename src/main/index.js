@@ -175,7 +175,7 @@ ipcMain.on('rpc_commit_wallet', (event, data) => {
     event.sender.send('rpc_wallet_committed');
 });
 
-ipcMain.on('rate_usd_wow', (event, data) => {
+ipcMain.on('rate_btc_wow', (event, data) => {
     console.log(data);
 });
 

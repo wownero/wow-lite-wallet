@@ -6,23 +6,23 @@
 
                     </div>
 
-                    <div v-if="usd < 1">
+                    <div v-if="btc < 1">
                         <div class="bubble" :style="`background-image: url(${this.path_bubble(0)})`"></div>
                     </div>
 
-                    <div v-else-if="usd < 100">
+                    <div v-else-if="btc < 100">
                         <div class="bubble" :style="`background-image: url(${this.path_bubble(1)})`"></div>
                     </div>
 
-                    <div v-else-if="usd < 500">
+                    <div v-else-if="btc < 500">
                         <div class="bubble" :style="`background-image: url(${this.path_bubble(2)})`"></div>
                     </div>
 
-                    <div v-else-if="usd < 1500">
+                    <div v-else-if="btc < 1500">
                         <div class="bubble" :style="`background-image: url(${this.path_bubble(3)})`"></div>
                     </div>
 
-                    <div v-else-if="usd >= 1500">
+                    <div v-else-if="btc >= 1500">
                         <div class="bubble" :style="`background-image: url(${this.path_bubble(4)})`"></div>
                     </div>
                 </div>
@@ -43,22 +43,22 @@
             wallet() {
                 return this.$store.getters.wallet;
             },
-            usd(){
-                return (this.$store.getters.usd_rate / 1000) * this.$store.getters.wallet.balance;
+            btc(){
+                return this.$store.getters.btc_rate * this.$store.getters.wallet.balance;
             },
             bubble_img() {
-                let rate = this.$store.getters.usd_rate;
-                let usd = (rate / 1000) * this.$store.getters.wallet.balance;
+                let rate = this.$store.getters.btc_rate;
+                let btc = rate * this.$store.getters.wallet.balance;
 
-                if(usd < 1){
+                if(btc < 1){
                     return this.path_bubble(0);
-                } else if(usd < 100){
+                } else if(btc < 100){
                     return this.path_bubble(1);
-                } else if(usd < 500){
+                } else if(btc < 500){
                     return this.path_bubble(2);
-                } else if(usd < 1000){
+                } else if(btc < 1000){
                     return this.path_bubble(3);
-                } else if(usd < 1000){
+                } else if(btc < 1000){
                     return this.path_bubble(4);
                 }
             }

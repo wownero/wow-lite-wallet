@@ -10,12 +10,12 @@
                     Balance: <span>{{wallet.balance}}</span>
                 </span>
                 |
-                <span class="balance_usd">
+                <span class="balance_btc">
                     Unlocked: <span>{{wallet.unlocked}}</span>
                 </span>
                 |
-                <span class="balance_usd">
-                    USD: <span>{{Number((usd_rate/1000)*wallet.balance).toFixed(2)}}</span>
+                <span class="balance_btc">
+                    BTC: <span>{{Number(btc_rate*wallet.balance).toFixed(9)}}</span>
                 </span>
             </div>
 
@@ -45,8 +45,8 @@
             wallet() {
                 return this.$store.getters.wallet;
             },
-            usd_rate() {
-                return this.$store.getters.usd_rate;
+            btc_rate() {
+                return this.$store.getters.btc_rate;
             }
         },
         methods: {

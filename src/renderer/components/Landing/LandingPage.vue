@@ -118,8 +118,8 @@
         mounted() {
             let select_node = jQuery('#selectnode');
             const axios = require('axios');
-            axios.get('https://funding.wownero.com/api/1/convert/wow-usd?amount=1000').then(response => {
-                this.$store.commit('addRate', response.data.usd);
+            axios.get('https://tradeogre.com/api/v1/ticker/btc-wow').then(response => {
+                this.$store.commit('addRate', response.data.ask);
             });
 
             axios.get(`https://funding.wownero.com/api/1/wowlight?version=0.1.4`).then(response => {
