@@ -86,5 +86,7 @@ export const messages = [
     'Rebuilding WinoBot!',
     'He who runs, doesn\'t walk!',
     'Downloading Shaggy_Complete_Collection.zip [148 GB left]',
-    'Arrays start at 1!'
+    'Arrays start at 1!',
+    'Junkie Jeff thanks you for mining Wownero',
+    'Wownero - Iterative Discourse - a blackhat culture'
 ];
