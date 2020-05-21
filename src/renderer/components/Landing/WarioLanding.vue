@@ -17,7 +17,7 @@
 
             <div class="grassfill">
                 <span class="version">
-                    0.1.3 - <span style="font-size:12px;">{{version_embedded}}</span>
+                    0.1.4 - <span style="font-size:12px;">{{version_embedded}}</span>
                 </span>
                 <a class="credits" href="#"  v-on:click="openCredits">
                     Credits

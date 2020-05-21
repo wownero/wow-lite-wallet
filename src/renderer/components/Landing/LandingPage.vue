@@ -122,7 +122,7 @@
                 this.$store.commit('addRate', response.data.usd);
             });
 
-            axios.get(`https://funding.wownero.com/api/1/wowlight?version=0.1.3`).then(response => {
+            axios.get(`https://funding.wownero.com/api/1/wowlight?version=0.1.4`).then(response => {
                 if(response.data.data === false) {
                     const {dialog} = require('electron').remote
                     const dialogOptions = {
