@@ -122,6 +122,10 @@
                 this.$store.commit('addRate', response.data.ask);
             });
 
+            axios.get('https://tradeogre.com/api/v1/ticker/btc-xmr').then(response => {
+                this.$store.commit('addRateXMR', response.data.ask);
+            });
+
             axios.get(`https://funding.wownero.com/api/1/wowlight?version=0.1.4`).then(response => {
                 if(response.data.data === false) {
                     const {dialog} = require('electron').remote

@@ -80,6 +80,9 @@ export default new Vuex.Store({
         addRate(state, data){
             state.btc_rate = data;
         },
+        addRateXMR(state, data){
+            state.xmr_rate = data;
+        },
         showError(state, data){
             state.error = data;
         },
@@ -137,6 +140,7 @@ export default new Vuex.Store({
         wallet_path: state => state.wallet_path,
         wallet_password: state => state.wallet_password,
         btc_rate: state => state.btc_rate,
+        xmr_rate: state => state.xmr_rate,
         message_box: state => state.message_box,
         password_box: state => state.password_box,
         height_from: state => state.height_from,

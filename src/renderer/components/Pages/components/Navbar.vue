@@ -17,6 +17,10 @@
                 <span class="balance_btc">
                     BTC: <span>{{Number(btc_rate*wallet.balance).toFixed(9)}}</span>
                 </span>
+                |
+                <span class="balance_xmr">
+                    XMR: <span>{{Number(btc_rate*wallet.balance/xmr_rate).toFixed(9)}}</span>
+                </span>
             </div>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
@@ -47,6 +51,9 @@
             },
             btc_rate() {
                 return this.$store.getters.btc_rate;
+            },
+            xmr_rate() {
+                return this.$store.getters.xmr_rate;
             }
         },
         methods: {
