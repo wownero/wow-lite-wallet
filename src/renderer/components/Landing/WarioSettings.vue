@@ -10,7 +10,7 @@
             <div class="coin" style="height: 24px;width: 24px;top:54px;right:32px;"></div>
         </div>
 
-        <div class="perlsux"></div>
+        <div class="hypnotoad"></div>
 
         <div class="grass_container">
             <div class="grass"></div>
@@ -34,7 +34,7 @@
             }
         },
         mounted() {
-            jQuery('main.credits .perlsux').click((event) => {
+            jQuery('main.credits .hypnotoad').click((event) => {
                 this.back();
             });
         },

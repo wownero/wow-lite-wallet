@@ -51,7 +51,7 @@
             }
         },
         mounted() {
-            jQuery('main.credits .perlsux').click((event) => {
+            jQuery('main.credits .hypnotoad').click((event) => {
                 this.back();
             });
             jQuery('#password').focus();

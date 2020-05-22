@@ -10,7 +10,7 @@
             <div class="coin" style="height: 24px;width: 24px;top:54px;right:32px;"></div>
         </div>
 
-        <div class="perlsux"></div>
+        <div class="hypnotoad"></div>
 
         <div class="grass_container">
             <div class="grass"></div>
@@ -46,7 +46,7 @@
             function wario_animate(){
                 wario.animate({
                     left: `${window_width}px`
-                }, 8000, 'linear', () => {
+                }, 8500, 'linear', () => {
                     wario.css('left', '-400px');
                     wario_animate();
                 });
