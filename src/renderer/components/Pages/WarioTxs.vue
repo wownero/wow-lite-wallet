@@ -47,18 +47,17 @@
                 return this.$store.getters.btc_rate * this.$store.getters.wallet.balance;
             },
             bubble_img() {
-                let rate = this.$store.getters.usd_rate;
-                let usd = (rate / 1000) * this.$store.getters.wallet.balance;
+                let bal = this.$store.getters.wallet.balance;
 
-                if(usd < 1){
+                if(bal < 1){
                     return this.path_bubble(0);
-                } else if(usd < 100){
+                } else if(bal < 100){
                     return this.path_bubble(1);
-                } else if(usd < 500){
+                } else if(bal < 1000){
                     return this.path_bubble(2);
-                } else if(usd < 1000){
+                } else if(bal < 2000){
                     return this.path_bubble(3);
-                } else if(usd < 1000){
+                } else if(bal > 2000){
                     return this.path_bubble(4);
                 }
             }
