@@ -361,7 +361,7 @@ textarea.seed {
     font-size: 18px;
     color: #70bf19;
     font-weight: bold;
-    background: rgba(0, 0, 0, 0.03);
+    background-color: rgba(255, 255, 255, 0.85);
 }
 
 p {
