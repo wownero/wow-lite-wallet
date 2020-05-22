@@ -23,14 +23,14 @@ export default new Vuex.Store({
         password_box: {
             'message': ''
         },
-        usd_rate: 0,  // per 1000 WOW
+        btc_rate: 0,  // per 1000 WOW
         wallet: {
             'path': '',
             'txs': [],
             'balance': 0,
             'unlocked': 0,
             'address': '',
-            'usd': 0,
+            'btc': 0,
             'state': -1
         }, // wallet opened
         wallet_path: '',
@@ -78,7 +78,10 @@ export default new Vuex.Store({
             state.appState = data;
         },
         addRate(state, data){
-            state.usd_rate = data;
+            state.btc_rate = data;
+        },
+        addRateXMR(state, data){
+            state.xmr_rate = data;
         },
         showError(state, data){
             state.error = data;
@@ -136,7 +139,8 @@ export default new Vuex.Store({
         wallet: state => state.wallet,
         wallet_path: state => state.wallet_path,
         wallet_password: state => state.wallet_password,
-        usd_rate: state => state.usd_rate,
+        btc_rate: state => state.btc_rate,
+        xmr_rate: state => state.xmr_rate,
         message_box: state => state.message_box,
         password_box: state => state.password_box,
         height_from: state => state.height_from,

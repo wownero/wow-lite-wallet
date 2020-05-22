@@ -26,8 +26,8 @@
             wallet() {
                 return this.$store.getters.wallet;
             },
-            usd(){
-                return (this.$store.getters.usd_rate / 1000) * this.$store.getters.wallet.balance;
+            btc(){
+                return (this.$store.getters.btc_rate) * this.$store.getters.wallet.balance;
             },
             bubble_img() {
                 let rate = this.$store.getters.usd_rate;

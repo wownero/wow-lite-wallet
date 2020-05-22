@@ -34,7 +34,7 @@
                                 {{tx.in === 'in' ? '+' : '-'}}{{tx.amount}}
 
                                 <small style="color: black">
-                                    ➞ $ {{Number((usd_rate/1000)*tx.amount).toFixed(2)}}
+                                    ➞ $ {{Number(btc_rate*tx.amount).toFixed(9)}}
                                 </small>
                             </span>
                         </span>
@@ -55,8 +55,8 @@
     export default {
         name: "TxHistoryList",
         computed: {
-            usd_rate() {
-                return this.$store.getters.usd_rate;
+            btc_rate() {
+                return this.$store.getters.btc_rate;
             },
             wallet() {
                 return this.$store.getters.wallet;

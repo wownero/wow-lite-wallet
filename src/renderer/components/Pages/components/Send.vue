@@ -18,7 +18,7 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group amount">
-                                        <label>Amount <small class="amount_usd"></small></label>
+                                        <label>Amount <small class="amount_btc"></small></label>
                                         <input type="text" v-on:input="validate" v-on:keypress="isAmount()" name="amount" class="form-control amount" placeholder="Amount">
                                     </div>
                                 </div>
@@ -74,8 +74,8 @@
             wallet() {
                 return this.$store.getters.wallet;
             },
-            usd_rate() {
-                return this.$store.getters.usd_rate;
+            btc_rate() {
+                return this.$store.getters.btc_rate;
             }
         },
         methods: {
@@ -126,7 +126,7 @@
                 let regexp_address = /([S|W][o|W][a-zA-Z0-9]{95})|(So[a-zA-Z0-9]{106})/g;
                 let address = form.find('textarea.address').val().trim();
                 let amount = form.find('input.amount').val().trim();
-                let usd = jQuery('form#sendForm .amount label small');
+                let btc = jQuery('form#sendForm .amount label small');
 
                 let invalid = function(msg){
                     jQuery('button.send_btn').addClass('disabled');
@@ -134,23 +134,23 @@
 
                 if(amount.startsWith('.') || amount.endsWith('.')) {
                     this.error = 'Invalid WOW amount'
-                    usd.html('');
+                    btc.html('');
                     return invalid();
                 }
 
                 if((amount.split('.').length - 1) > 1){
                     this.error = 'Invalid WOW amount';
-                    usd.html('');
+                    btc.html('');
                     return invalid();
                 }
 
                 if((amount === 0)){
                     //this.error = 'Invalid WOW amount';
-                    usd.html('');
+                    btc.html('');
                     return invalid();
                 }
 
-                usd.html(`(${Number((this.usd_rate/1000)*amount).toFixed(2)} USD)`);
+                btc.html(`(${Number(this.btc_rate*amount).toFixed(9)} BTC)`);
 
                 let addy_match = address.match(regexp_address);
                 if(!addy_match){
