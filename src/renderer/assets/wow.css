@@ -638,6 +638,7 @@ form#sendForm .amount label small {
 }
 
 main.dashboard{
+    background-image: url("~@/assets/background3.png");
     margin-top: 42px;
 }
 
