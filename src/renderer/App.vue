@@ -47,7 +47,7 @@
 
 <script>
     export default {
-        name: 'wowlight',
+        name: 'wowlite',
         computed: {
             height_from() {
                 return this.$store.getters.height_from;

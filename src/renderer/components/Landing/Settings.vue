@@ -69,7 +69,7 @@
             pathConfig() {
                 const path = require('path');
 
-                return path.join(this.$store.state.wallet_dir, 'wowlight.json');
+                return path.join(this.$store.state.wallet_dir, 'wowlite.json');
             }
         }
     }

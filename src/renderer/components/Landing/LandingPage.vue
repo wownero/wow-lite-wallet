@@ -126,14 +126,14 @@
                 this.$store.commit('addRateXMR', response.data.ask);
             });
 
-            axios.get(`https://funding.wownero.com/api/1/wowlight?version=0.1.4`).then(response => {
+            axios.get(`https://funding.wownero.com/api/1/wowlite?version=0.1.4`).then(response => {
                 if(response.data.data === false) {
                     const {dialog} = require('electron').remote
                     const dialogOptions = {
                         type: 'error',
                         title: 'Outdated client',
                         buttons: ['OK'],
-                        message: `You are running an old instance of wowlight and need to upgrade!\n\nVisit https://light.wownero.com for a shiny new version.`
+                        message: `You are running an old instance of wowlite and need to upgrade!\n\nVisit https://light.wownero.com for a shiny new version.`
                     }
                     dialog.showMessageBox(dialogOptions, i => {});
                 }

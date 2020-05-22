@@ -14,9 +14,9 @@ const execPath = IS_PROD ?
 
 
 const cli_binaries = {
-    'linux': 'wowlight',
-    'mac': 'wowlight',
-    'win': 'wowlight.exe'
+    'linux': 'wowlite',
+    'mac': 'wowlite',
+    'win': 'wowlite.exe'
 }
 
 export const cliPath = `${joinPath(execPath, cli_binaries[getPlatform()])}`;

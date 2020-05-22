@@ -3,7 +3,7 @@ const fs = require('fs');
 
 export class Config {
     constructor(wowdir) {
-        this._path_cfg = `${wowdir}/wowlight.json`;
+        this._path_cfg = `${wowdir}/wowlite.json`;
         this.create();
         this.data = this.load();
     }

@@ -11,7 +11,7 @@ export class WowRpc {
     constructor(wowdir, cli_path) {
         this._wowdir = wowdir;
         this._cli_process = null;
-        this._cli_log_path = path.join(os.tmpdir(), 'wowlight-wallet.log');
+        this._cli_log_path = path.join(os.tmpdir(), 'wowlite-wallet.log');
         if(!cli_path) {
             this._cli_path = cliPath;
         } else {

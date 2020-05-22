@@ -30,7 +30,7 @@ make -j4
 Use `light_patch.diff` that's included in this repository. Move resulting binary into the resources folder:
 
 ```
-cp build/release/bin/wownero-wallet-cli wowlight/resources/linux/bin/wowlight
+cp build/release/bin/wownero-wallet-cli wowlite/resources/linux/bin/wowlite
 ```
 
 Build the light wallet:
