@@ -65,6 +65,7 @@
                             <li>kloinka</li>
                             <li>ilovetron</li>
                             <li>\x</li>
+                            <li>mj <small>(Resident artist)</small></li>
                         </ul>
                     </div>
                 </div>
