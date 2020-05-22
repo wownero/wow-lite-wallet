@@ -830,6 +830,7 @@ main.create-wallet-seed {
 }
 
 main.credits ul, main.landing ul, main.create-wallet-seed ul {
+    background-color: rgba(255, 255, 255, 0.85);
     margin-left: 20px;
 }
 
@@ -968,7 +969,7 @@ main.credits .hypnotoad {
 }
 
 main.credits .hypnotoad:hover {
-    transform: rotate(10deg);
+    transform: rotate(-10deg);
 }
 
 .wario_seq .grassfill .version {
